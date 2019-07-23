@@ -25,8 +25,8 @@ let lastLogger = ''
 export class Logger implements ILogger {
   readonly loggerName: string
   readonly color: string
-  private stdout: Stream
-  private stderr: Stream
+  public stdout: Writable
+  public stderr: Writable
   private ignoreFunction: Function
 
   constructor(loggerName, color) {

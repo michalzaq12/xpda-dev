@@ -1,5 +1,3 @@
-import { Stream } from 'stream'
-
 import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
@@ -16,7 +14,7 @@ export class ElectronApp extends EventEmitter {
   readonly relaunchCode: number
   readonly inspectionPort: number
   readonly entryFile: string
-  private outputStd: Stream = null
+  private outputStd: ILogger = null
   private process: ChildProcess = null
   public logger: ILogger
 
@@ -77,14 +75,14 @@ export class ElectronApp extends EventEmitter {
     this.process = null
   }
 
-  public redirectStdout(stream) {
-    this.outputStd = stream
-    this.pipe(stream)
+  public redirectStdout(logger: ILogger) {
+    this.outputStd = logger
+    this.pipe(logger)
   }
 
-  private pipe(stream) {
+  private pipe(logger: ILogger) {
     if (!this.isRunning) return
-    this.process.stdout.pipe(stream.stdout)
-    this.process.stderr.pipe(stream.stderr)
+    this.process.stdout.pipe(logger.stdout)
+    this.process.stderr.pipe(logger.stderr)
   }
 }
