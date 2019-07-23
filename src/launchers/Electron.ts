@@ -1,8 +1,9 @@
 import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import { killWithAllSubProcess } from './utils/kill-process'
-import { ILogger } from './utils/ILogger'
+import { killWithAllSubProcess } from '../utils/kill-process'
+import { ILogger } from '../utils/ILogger'
+import { ILauncher } from './ILauncher'
 
 export interface IElectronConfig {
   entryFile: string
@@ -10,7 +11,7 @@ export interface IElectronConfig {
   relaunchCode?: number
 }
 
-export class ElectronApp extends EventEmitter {
+export class Electron extends EventEmitter implements ILauncher {
   readonly relaunchCode: number
   readonly inspectionPort: number
   readonly entryFile: string
@@ -28,7 +29,7 @@ export class ElectronApp extends EventEmitter {
     this.redirectStdout(this.logger)
   }
 
-  public launch() {
+  public async launch() {
     let args = [`--inspect=${this.inspectionPort}`, this.entryFile, '--auto-detect=false', '--no-proxy-server']
 
     // if (process.env.npm_execpath.endsWith('yarn.js')) {

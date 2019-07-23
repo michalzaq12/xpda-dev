@@ -1,32 +1,28 @@
 import { Logger } from './utils/logger'
 import * as del from 'del'
-import { ElectronApp, IElectronConfig } from './Electron'
+import { ElectronApp, IElectronConfig } from './launchers/Electron'
 import { IStep } from './steps/IStep'
 import { cleanupAndExit } from './cleanup'
+import { ILauncher } from './launchers/ILauncher'
 
 export interface IConfig {
-  isProduction: boolean
   isDevelopment: boolean
-  electron: IElectronConfig
+  launcher: ILauncher
 }
 
 export class Pipeline {
   private static instances: Array<Pipeline> = []
 
-  private electron: ElectronApp
+  private launcher: ILauncher
   readonly config: IConfig
   private steps: Array<IStep> = []
 
   constructor(config: IConfig) {
     Pipeline.instances.push(this)
     this.config = config
-    this.setupElectron()
-  }
-
-  private setupElectron() {
-    this.electron = new ElectronApp(this.config.electron, new Logger('Electron', 'teal'))
-    this.electron.on('relaunch', () => Logger.info('Relaunching electron... '))
-    this.electron.on('exit', code => {
+    this.launcher = config.launcher
+    this.launcher.on('relaunch', () => Logger.info('Relaunching electron... '))
+    this.launcher.on('exit', code => {
       Logger.info('Killing all processes... (reason: electron app close event) ')
       cleanupAndExit(code)
     })
@@ -41,14 +37,14 @@ export class Pipeline {
       await step.terminate()
     })
     this.steps = []
-    await this.electron.exit()
+    await this.launcher.exit()
   }
 
   public build() {
     const text = this.config.isDevelopment ? 'starting development env...' : 'building for production'
     Logger.spinnerStart(text)
 
-    if (this.config.isProduction) Pipeline.cleanBuildDirectory()
+    if (!this.config.isDevelopment) Pipeline.cleanBuildDirectory()
 
     const promises = []
 
@@ -58,7 +54,7 @@ export class Pipeline {
 
     Promise.all(promises)
       .then(() => {
-        if (this.config.isDevelopment) this.electron.launch()
+        if (this.config.isDevelopment) this.launcher.launch()
         Logger.spinnerSucceed('Done')
         if (!this.config.isDevelopment) cleanupAndExit(0)
       })
