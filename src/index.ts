@@ -1,27 +1,26 @@
-import {Logger} from './utils/logger'
+import { Logger } from './utils/logger'
 import * as path from 'path'
 // @ts-ignore
 import del from 'del'
 
 import { ElectronApp } from './Electron'
-import {IBuilder} from "./IBuilder";
-
+import { IBuilder } from './IBuilder'
 
 interface IConfig {
-  isProduction: boolean,
-  isDevelopment: boolean,
-  entryFile: string,
+  isProduction: boolean
+  isDevelopment: boolean
+  entryFile: string
 }
 
 export class Pipeline {
-  private static instance: Pipeline;
+  private static instance: Pipeline
 
-  readonly electron : ElectronApp;
-  readonly config : IConfig;
-  private other : Array<IBuilder> = [];
+  readonly electron: ElectronApp
+  readonly config: IConfig
+  private other: Array<IBuilder> = []
 
-  constructor(config : IConfig) {
-    this.config = config;
+  constructor(config: IConfig) {
+    this.config = config
     this.electron = new ElectronApp(config.entryFile)
     this.electron.on('exit', code => {
       Logger.info('Killing all processes... (reason: electron app close event) ')
@@ -29,26 +28,26 @@ export class Pipeline {
     })
   }
 
-  static createInstance(config : IConfig){
-    Pipeline.instance = new Pipeline(config);
-    return Pipeline.instance;
+  static createInstance(config: IConfig) {
+    Pipeline.instance = new Pipeline(config)
+    return Pipeline.instance
   }
 
   static getInstance() {
-    return Pipeline.instance;
+    return Pipeline.instance
   }
 
-  addBuilder(builder : IBuilder){
-    this.other.push(builder);
+  addBuilder(builder: IBuilder) {
+    this.other.push(builder)
   }
 
-  public build(){
+  public build() {
     const text = this.config.isDevelopment ? 'starting development env...' : 'building for production'
     Logger.spinnerStart(text)
 
     if (this.config.isProduction) cleanBuildDirectory()
 
-    const promises = [];
+    const promises = []
 
     this.other.forEach(builder => {
       promises.push(builder.build())
@@ -65,14 +64,9 @@ export class Pipeline {
         cleanupProcessAndExit(1)
       })
   }
-
 }
 
-
-
-
-
-function cleanBuildDirectory () {
+function cleanBuildDirectory() {
   try {
     del.sync(['dist/main/*', '!.gitkeep'])
     del.sync(['dist/renderer/*', '!.gitkeep'])
@@ -83,8 +77,7 @@ function cleanBuildDirectory () {
   }
 }
 
-
-async function cleanupProcessAndExit (exitCode, exit = true) {
+async function cleanupProcessAndExit(exitCode, exit = true) {
   await Pipeline.getInstance().electron.exit()
   if (exit) process.exit(exitCode)
 }

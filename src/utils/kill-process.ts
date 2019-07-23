@@ -1,6 +1,6 @@
 import * as psTree from 'ps-tree'
 
-export function killProcess (pid, warningOut = console.warn) {
+export function killProcess(pid, warningOut = console.warn) {
   try {
     process.kill(pid)
   } catch (e) {
@@ -9,7 +9,7 @@ export function killProcess (pid, warningOut = console.warn) {
   }
 }
 
-export function killWithAllSubProcess (pid, warningOut = console.warn) {
+export function killWithAllSubProcess(pid, warningOut = console.warn) {
   return new Promise((resolve, reject) => {
     psTree(pid, (err, children) => {
       if (err) reject(err)

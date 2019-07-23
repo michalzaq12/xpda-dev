@@ -1,24 +1,23 @@
-import {Stream} from "stream";
+import { Stream } from 'stream'
 
 import * as electronPath from 'electron'
-import {ChildProcess, spawn} from "child_process"
-import {EventEmitter} from 'events'
+import { ChildProcess, spawn } from 'child_process'
+import { EventEmitter } from 'events'
 import { killWithAllSubProcess } from './utils/kill-process'
-import {Logger} from "./utils/Logger";
+import { Logger } from './utils/Logger'
 
 export * from './utils/Logger'
 
 export class ElectronApp extends EventEmitter {
-
-  readonly RELAUNCH_CODE : number
-  readonly INSPECTION_PORT : number
-  readonly ENTRY_PATH : string
-  private outputStd : Stream
+  readonly RELAUNCH_CODE: number
+  readonly INSPECTION_PORT: number
+  readonly ENTRY_PATH: string
+  private outputStd: Stream
   private process: ChildProcess
 
-  public logger : Logger
+  public logger: Logger
 
-  constructor (entryPath, inspectionPort = 5858, relaunchCode = 250) {
+  constructor(entryPath, inspectionPort = 5858, relaunchCode = 250) {
     super()
     this.ENTRY_PATH = entryPath
     this.RELAUNCH_CODE = relaunchCode
@@ -29,19 +28,14 @@ export class ElectronApp extends EventEmitter {
     console.log(this.ENTRY_PATH)
   }
 
-  private initLogger(){
+  private initLogger() {
     this.logger = new Logger('Electron', 'teal')
     this.logger.ignore(text => text.indexOf('source: chrome-devtools://devtools/bundled/shell.js (108)') > -1)
     this.redirectStdout(this.logger)
   }
 
-  public launch () {
-    let args = [
-      `--inspect=${this.INSPECTION_PORT}`,
-      this.ENTRY_PATH,
-      '--auto-detect=false',
-      '--no-proxy-server'
-    ]
+  public launch() {
+    let args = [`--inspect=${this.INSPECTION_PORT}`, this.ENTRY_PATH, '--auto-detect=false', '--no-proxy-server']
 
     // if (process.env.npm_execpath.endsWith('yarn.js')) {
     //   args = args.concat(process.argv.slice(3))
@@ -64,16 +58,16 @@ export class ElectronApp extends EventEmitter {
     })
   }
 
-  public get isRunning () {
+  public get isRunning() {
     return this.process !== null
   }
 
-  public get pid () {
+  public get pid() {
     if (!this.isRunning) return undefined
     else return this.process.pid
   }
 
-  public async relaunch () {
+  public async relaunch() {
     if (!this.isRunning) return
     this.emit('relaunch')
     Logger.info('Relaunching electron... ')
@@ -81,7 +75,7 @@ export class ElectronApp extends EventEmitter {
     this.launch()
   }
 
-  public async exit () {
+  public async exit() {
     if (!this.isRunning) return
     this.process.removeAllListeners('exit')
 
@@ -89,12 +83,12 @@ export class ElectronApp extends EventEmitter {
     this.process = null
   }
 
-  public redirectStdout (stream) {
+  public redirectStdout(stream) {
     this.outputStd = stream
     this.pipe(stream)
   }
 
-  private pipe (stream) {
+  private pipe(stream) {
     if (!this.isRunning) return
     this.process.stdout.pipe(stream.stdout)
     this.process.stderr.pipe(stream.stderr)

@@ -1,4 +1,4 @@
-import {Stream} from "stream";
+import { Stream } from 'stream'
 
 import chalk from 'chalk'
 import { Writable } from 'stream'
@@ -9,45 +9,44 @@ const spinner = ora({
   text: 'Staring ...',
   stream: process.stdout,
   indent: 9,
-  color: 'white'
+  color: 'white',
 })
 
 const staticLogger = ora({
   isEnabled: false,
   stream: process.stdout,
   indent: 9,
-  color: 'white'
+  color: 'white',
 })
 
 let lastLogger = ''
 
 export class Logger {
+  readonly loggerName: string
+  readonly color: string
+  private stdout: Stream
+  private stderr: Stream
+  private ignoreFunction: Function
 
-  readonly loggerName : string
-  readonly color : string
-  private stdout : Stream
-  private stderr : Stream
-  private ignoreFunction : Function
-
-  constructor (loggerName, color) {
+  constructor(loggerName, color) {
     this.loggerName = loggerName
     this.color = color
     this.initStreams()
   }
 
-  private initStreams () {
+  private initStreams() {
     const self = this
     this.stdout = new Writable({
-      write (chunk, encoding, callback) {
+      write(chunk, encoding, callback) {
         self.info(chunk)
         callback()
-      }
+      },
     })
     this.stderr = new Writable({
-      write (chunk, encoding, callback) {
+      write(chunk, encoding, callback) {
         self.error(chunk)
         callback()
-      }
+      },
     })
 
     this.stdout.on('finish', () => {
@@ -58,67 +57,72 @@ export class Logger {
     })
   }
 
-  static _parseSpinnerText (text) {
+  static _parseSpinnerText(text) {
     return chalk.inverse('Electron-nuxt') + ': ' + chalk.underline(text)
   }
 
-  static _parseSpinnerTextError (text) {
+  static _parseSpinnerTextError(text) {
     return chalk.inverse('Electron-nuxt') + ': ' + chalk.underline.redBright(text)
   }
 
-  static spinnerStart (text) {
+  static spinnerStart(text) {
     if (text !== undefined) spinner.text = Logger._parseSpinnerText(text)
     spinner.start()
   }
 
-  static spinnerSucceed (text) {
+  static spinnerSucceed(text) {
     spinner.succeed(Logger._parseSpinnerText(text))
   }
 
-  static spinnerFail (text, error) {
+  static spinnerFail(text, error) {
     spinner.fail(Logger._parseSpinnerTextError(error || text))
   }
 
-  static info (text) {
+  static info(text) {
     Logger.reset()
     staticLogger.info(Logger._parseSpinnerText(text))
   }
 
-  static reset () {
+  static reset() {
     lastLogger = ''
   }
 
-  info (text) {
+  info(text) {
     text = text.toString()
     if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
     Logger._log(this.loggerName, this.color, text)
   }
 
-  error (text) {
+  error(text) {
     text = text.toString()
     if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
     Logger._log(this.loggerName, this.color, text, 'red')
   }
 
-  logWebpackStats (data) {
-    return this.info(data.toString({
-      colors: true,
-      chunks: false
-    }))
+  logWebpackStats(data) {
+    return this.info(
+      data.toString({
+        colors: true,
+        chunks: false,
+      })
+    )
   }
 
-  ignore (ignoreFunc) {
+  ignore(ignoreFunc) {
     this.ignoreFunction = ignoreFunc
   }
 
-  static _log (loggerName, loggerColor, text, textColor ?) {
+  static _log(loggerName, loggerColor, text, textColor?) {
     if (text.trim() === '' || text.trim() === ' ') return
     if (spinner.isSpinning) {
       readline.clearLine(process.stdout, 0)
       readline.cursorTo(process.stdout, 0)
     }
     if (lastLogger !== loggerName) console.log(chalk.keyword('white').bgKeyword(loggerColor)(`\n  ${loggerName}  `))
-    text = text.split(/\r?\n/).map(el => chalk.keyword(loggerColor)('│  ') + el).join('\n')
+    text = text
+      .split(/\r?\n/)
+      .map(el => chalk.keyword(loggerColor)('│  ') + el)
+      .join('\n')
     if (textColor !== undefined) process.stdout.write(chalk.keyword(textColor)(text))
     else process.stdout.write(text)
     process.stdout.write('\n')
