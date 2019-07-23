@@ -1,7 +1,7 @@
 import { Logger } from './utils/logger'
 import * as del from 'del'
 import { ElectronApp, IElectronConfig } from './Electron'
-import { IPipelineStep } from './IPipelineStep'
+import { IStep } from './steps/IStep'
 import { cleanupAndExit } from './cleanup'
 
 export interface IConfig {
@@ -15,7 +15,7 @@ export class Pipeline {
 
   private electron: ElectronApp
   readonly config: IConfig
-  private steps: Array<IPipelineStep> = []
+  private steps: Array<IStep> = []
 
   constructor(config: IConfig) {
     Pipeline.instances.push(this)
@@ -32,7 +32,7 @@ export class Pipeline {
     })
   }
 
-  addStep(step: IPipelineStep) {
+  addStep(step: IStep) {
     this.steps.push(step)
   }
 

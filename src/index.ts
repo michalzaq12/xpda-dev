@@ -1,3 +1,3 @@
 export * from './Pipeline'
-export * from './IPipelineStep'
+export * from './steps/IStep'
 export * from './utils/Logger'

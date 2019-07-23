@@ -1,7 +1,7 @@
-import { IPipelineStep } from '../IPipelineStep'
+import { IStep } from './IStep'
 import { ILogger } from '../utils/ILogger'
 
-export class Timer implements IPipelineStep {
+export class Timer implements IStep {
   private timeout
   private readonly logger: ILogger
 

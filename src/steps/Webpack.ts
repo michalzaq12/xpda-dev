@@ -1,7 +1,7 @@
-import { IPipelineStep } from '../IPipelineStep'
+import { IStep } from './IStep'
 import { ILogger } from '../utils/ILogger'
 
-export class Webpack implements IPipelineStep {
+export class Webpack implements IStep {
   private readonly logger: ILogger
   readonly webpackConfig
   private readonly compiler
