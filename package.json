@@ -1,0 +1,40 @@
+{
+  "name": "electron-dev-kit",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "npm run build -- --watch"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalzaq12/electron-dev-kit.git"
+  },
+  "keywords": [],
+  "author": "“Michał <“michal.m.zarach@gmail.com”>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michalzaq12/electron-dev-kit/issues"
+  },
+  "homepage": "https://github.com/michalzaq12/electron-dev-kit#readme",
+  "peerDependencies": {
+    "electron": "^5.0.0"
+  },
+  "dependencies": {
+    "@hapi/joi": "^15.1.0",
+    "@types/joi": "^14.3.3",
+    "chalk": "^2.4.2",
+    "electron": "^5.0.7",
+    "ora": "^3.2.0",
+    "ps-tree": "^1.2.0",
+    "del": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.4",
+    "typescript": "^3.5.3"
+  }
+}
