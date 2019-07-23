@@ -3,10 +3,12 @@ const path = require('path');
 const {Pipeline} = require('../lib');
 
 
-const pipe = Pipeline.createInstance({
+const pipe = new Pipeline({
     isDevelopment: true,
     isProduction: false,
-    entryFile: path.join(__dirname, './data/dummyMain.js')
+    electron: {
+      entryFile: path.join(__dirname, './data/dummyMain.js')
+    }
 });
 
 

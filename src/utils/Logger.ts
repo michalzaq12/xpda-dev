@@ -4,6 +4,7 @@ import chalk from 'chalk'
 import { Writable } from 'stream'
 import ora from 'ora/index'
 import * as readline from 'readline'
+import { ILogger } from './ILogger'
 
 const spinner = ora({
   text: 'Staring ...',
@@ -21,7 +22,7 @@ const staticLogger = ora({
 
 let lastLogger = ''
 
-export class Logger {
+export class Logger implements ILogger {
   readonly loggerName: string
   readonly color: string
   private stdout: Stream

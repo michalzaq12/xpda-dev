@@ -1,44 +1,45 @@
 import { Logger } from './utils/logger'
-import * as path from 'path'
-// @ts-ignore
-import del from 'del'
+import * as del from 'del'
+import { ElectronApp, IElectronConfig } from './Electron'
+import { IPipelineStep } from './IPipelineStep'
 
-import { ElectronApp } from './Electron'
-import { IBuilder } from './IBuilder'
-
-interface IConfig {
+export interface IConfig {
   isProduction: boolean
   isDevelopment: boolean
-  entryFile: string
+  electron: IElectronConfig
 }
 
 export class Pipeline {
-  private static instance: Pipeline
+  private static instances: Array<Pipeline> = []
 
-  readonly electron: ElectronApp
+  private electron: ElectronApp
   readonly config: IConfig
-  private other: Array<IBuilder> = []
+  private steps: Array<IPipelineStep> = []
 
   constructor(config: IConfig) {
+    Pipeline.instances.push(this)
     this.config = config
-    this.electron = new ElectronApp(config.entryFile)
+    this.setupElectron()
+  }
+
+  private setupElectron() {
+    this.electron = new ElectronApp(this.config.electron, new Logger('Electron', 'teal'))
+    this.electron.on('relaunch', () => Logger.info('Relaunching electron... '))
     this.electron.on('exit', code => {
       Logger.info('Killing all processes... (reason: electron app close event) ')
       cleanupProcessAndExit(code)
     })
   }
 
-  static createInstance(config: IConfig) {
-    Pipeline.instance = new Pipeline(config)
-    return Pipeline.instance
+  addStep(step: IPipelineStep) {
+    this.steps.push(step)
   }
 
-  static getInstance() {
-    return Pipeline.instance
-  }
-
-  addBuilder(builder: IBuilder) {
-    this.other.push(builder)
+  async stop() {
+    this.steps.forEach(async step => {
+      await step.terminate()
+    })
+    await this.electron.exit()
   }
 
   public build() {
@@ -49,7 +50,7 @@ export class Pipeline {
 
     const promises = []
 
-    this.other.forEach(builder => {
+    this.steps.forEach(builder => {
       promises.push(builder.build())
     })
 
@@ -63,6 +64,14 @@ export class Pipeline {
         Logger.spinnerFail('Something went wrong', err)
         cleanupProcessAndExit(1)
       })
+  }
+
+  static async stopAllPipelines() {
+    const promises = []
+    this.instances.forEach(pipeline => {
+      promises.push(pipeline.stop())
+    })
+    await Promise.all(promises)
   }
 }
 
@@ -78,7 +87,7 @@ function cleanBuildDirectory() {
 }
 
 async function cleanupProcessAndExit(exitCode, exit = true) {
-  await Pipeline.getInstance().electron.exit()
+  await Pipeline.stopAllPipelines()
   if (exit) process.exit(exitCode)
 }
 
