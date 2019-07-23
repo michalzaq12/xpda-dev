@@ -1,4 +1,4 @@
 export interface IPipelineStep {
-  build(): Promise<void>
+  build(isDev: boolean): Promise<void>
   terminate(): Promise<void>
 }

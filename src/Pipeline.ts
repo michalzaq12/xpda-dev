@@ -53,7 +53,7 @@ export class Pipeline {
     const promises = []
 
     this.steps.forEach(builder => {
-      promises.push(builder.build())
+      promises.push(builder.build(this.config.isDevelopment))
     })
 
     Promise.all(promises)

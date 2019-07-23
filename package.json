@@ -23,16 +23,18 @@
   },
   "homepage": "https://github.com/michalzaq12/electron-dev-kit#readme",
   "peerDependencies": {
-    "electron": "^5.0.0"
+    "electron": "^5.0.0",
+    "webpack": "^4.37.0"
   },
   "dependencies": {
     "@hapi/joi": "^15.1.0",
     "@types/joi": "^14.3.3",
     "chalk": "^2.4.2",
+    "del": "^5.0.0",
     "electron": "^5.0.7",
     "ora": "^3.2.0",
     "ps-tree": "^1.2.0",
-    "del": "^5.0.0"
+    "webpack": "^4.37.0"
   },
   "devDependencies": {
     "@types/node": "^12.6.4",

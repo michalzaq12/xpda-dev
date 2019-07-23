@@ -1,6 +1,7 @@
 
 const path = require('path');
-const {Pipeline, Webpack, Logger} = require('../lib');
+const {Pipeline, Logger} = require('../lib');
+const {Webpack} = require('../lib/steps');
 
 
 const pipe = new Pipeline({
@@ -11,7 +12,7 @@ const pipe = new Pipeline({
     }
 });
 
-pipe.addStep(new Webpack(new Logger('webpack', 'red')))
+pipe.addStep(new Webpack({}, new Logger('webpack', 'red')))
 
 
 pipe.build();
