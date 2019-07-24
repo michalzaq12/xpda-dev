@@ -1,5 +1,3 @@
-import { Stream } from 'stream'
-
 import chalk from 'chalk'
 import { Writable } from 'stream'
 import ora from 'ora/index'
@@ -98,15 +96,6 @@ export class Logger implements ILogger {
     text = text.toString()
     if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
     Logger._log(this.loggerName, this.color, text, 'red')
-  }
-
-  logWebpackStats(data) {
-    return this.info(
-      data.toString({
-        colors: true,
-        chunks: false,
-      })
-    )
   }
 
   ignore(ignoreFunc) {

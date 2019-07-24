@@ -1,5 +1,5 @@
 import { IStep } from './IStep'
-import { ILogger } from '../utils/ILogger'
+import { ILogger } from '../logger/ILogger'
 
 export class Timer implements IStep {
   private timeout

@@ -1,4 +1,4 @@
-import { Logger } from './utils/logger'
+import { Logger } from './logger/Logger'
 import * as del from 'del'
 import { IStep } from './steps/IStep'
 import { cleanupAndExit } from './cleanup'
@@ -23,9 +23,9 @@ export class Pipeline {
     this.launcher = config.launcher
     this.steps = config.steps || []
     this.launcher.on('relaunch', () => Logger.info('Relaunching electron... '))
-    this.launcher.on('exit', code => {
+    this.launcher.on('exit', async code => {
       Logger.info('Killing all processes... (reason: electron app close event) ')
-      cleanupAndExit(code)
+      await cleanupAndExit(code)
     })
   }
 
@@ -34,9 +34,7 @@ export class Pipeline {
   }
 
   async stop() {
-    this.steps.forEach(async step => {
-      await step.terminate()
-    })
+    for (const step of this.steps) await step.terminate()
     this.steps = []
     await this.launcher.exit()
   }
@@ -54,14 +52,14 @@ export class Pipeline {
     })
 
     Promise.all(promises)
-      .then(() => {
-        if (this.config.isDevelopment) this.launcher.launch()
+      .then(async () => {
+        if (this.config.isDevelopment) await this.launcher.launch()
         Logger.spinnerSucceed('Done')
-        if (!this.config.isDevelopment) cleanupAndExit(0)
+        if (!this.config.isDevelopment) await cleanupAndExit(0)
       })
-      .catch(err => {
+      .catch(async err => {
         Logger.spinnerFail('Something went wrong', err)
-        cleanupAndExit(1)
+        await cleanupAndExit(1)
       })
   }
 

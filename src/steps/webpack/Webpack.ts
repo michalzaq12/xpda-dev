@@ -1,5 +1,5 @@
 import { IStep } from '../IStep'
-import { ILogger } from '../../utils/ILogger'
+import { ILogger } from '../../logger/ILogger'
 import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'

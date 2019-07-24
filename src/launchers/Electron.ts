@@ -2,7 +2,7 @@ import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { killWithAllSubProcess } from '../utils/kill-process'
-import { ILogger } from '../utils/ILogger'
+import { ILogger } from '../logger/ILogger'
 import { ILauncher } from './ILauncher'
 
 export interface IElectronConfig {
@@ -16,7 +16,6 @@ export class Electron extends EventEmitter implements ILauncher {
   readonly relaunchCode: number
   readonly inspectionPort: number
   readonly entryFile: string
-  private outputStd: ILogger = null
   private process: ChildProcess = null
   public logger: ILogger
 
@@ -27,7 +26,6 @@ export class Electron extends EventEmitter implements ILauncher {
     this.inspectionPort = config.inspectionPort || 5858
     this.logger = config.logger
     this.logger.ignore(text => text.includes('source: chrome-devtools://devtools/bundled/shell.js (108)'))
-    this.redirectStdout(this.logger)
   }
 
   public async launch() {
@@ -39,10 +37,8 @@ export class Electron extends EventEmitter implements ILauncher {
     //   args = args.concat(process.argv.slice(2))
     // }
 
-    // @ts-ignore
-    this.process = spawn(electronPath, args)
-
-    if (this.outputStd) this.pipe(this.outputStd)
+    this.process = spawn((electronPath as unknown) as string, args)
+    this.pipe(this.logger)
 
     this.process.on('exit', code => {
       if (code === this.relaunchCode) this.relaunch()
@@ -73,13 +69,13 @@ export class Electron extends EventEmitter implements ILauncher {
     if (!this.isRunning) return
     this.process.removeAllListeners('exit')
 
+    // @ts-ignore
+    this.process.stdout.end()
+    // @ts-ignore
+    this.process.stderr.end()
+
     await killWithAllSubProcess(this.pid)
     this.process = null
-  }
-
-  public redirectStdout(logger: ILogger) {
-    this.outputStd = logger
-    this.pipe(logger)
   }
 
   private pipe(logger: ILogger) {
