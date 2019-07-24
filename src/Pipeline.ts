@@ -7,6 +7,7 @@ import { ILauncher } from './launchers/ILauncher'
 export interface IConfig {
   isDevelopment: boolean
   launcher: ILauncher
+  steps?: Array<IStep>
 }
 
 export class Pipeline {
@@ -14,12 +15,13 @@ export class Pipeline {
 
   private launcher: ILauncher
   readonly config: IConfig
-  private steps: Array<IStep> = []
+  private steps: Array<IStep>
 
   constructor(config: IConfig) {
     Pipeline.instances.push(this)
     this.config = config
     this.launcher = config.launcher
+    this.steps = config.steps || []
     this.launcher.on('relaunch', () => Logger.info('Relaunching electron... '))
     this.launcher.on('exit', code => {
       Logger.info('Killing all processes... (reason: electron app close event) ')

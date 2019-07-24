@@ -1,21 +1,24 @@
 import { IStep } from '../IStep'
 import { ILogger } from '../../utils/ILogger'
-import { Configuration, Compiler, Watching } from 'webpack'
+import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
+import { ILauncher } from '../../launchers/ILauncher'
 
 export class Webpack implements IStep {
   private readonly logger: ILogger
   readonly webpackConfig: Configuration
   private readonly compiler: Compiler
   private watching: Watching = null
+  private readonly launcher: ILauncher
 
-  constructor(webpackConfig: Configuration, logger: ILogger) {
-    this.logger = logger
-    this.webpackConfig = webpackConfig
+  constructor(config: { webpackConfig: Configuration; logger: ILogger; launcher: ILauncher }) {
+    this.logger = config.logger
+    this.webpackConfig = config.webpackConfig
+    this.launcher = config.launcher
     try {
       const webpack = require('webpack')
-      this.compiler = webpack(webpackConfig)
+      this.compiler = webpack(this.webpackConfig)
     } catch (e) {
       this.logger.error(e.message)
     }
@@ -38,7 +41,7 @@ export class Webpack implements IStep {
     })
   }
 
-  private logStats(stats) {
+  private logStats(stats: WebpackStats) {
     this.logger.info(
       stats.toString({
         colors: true,
@@ -51,8 +54,10 @@ export class Webpack implements IStep {
     return new Promise(resolve => {
       this.watching = this.compiler.watch({ ignored: /node_modules/, aggregateTimeout: 3000 }, (err, stats) => {
         if (err) this.logger.error(err.message)
-        else this.logStats(stats)
-        //else this.emit('after-compile', stats)
+        else {
+          this.logStats(stats)
+          this.launcher.relaunch()
+        }
         resolve()
       })
     })
@@ -61,7 +66,7 @@ export class Webpack implements IStep {
   private async run(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.compiler.run((err, stats) => {
-        //this.emit('after-compile', stats)
+        this.logStats(stats)
         if (err || stats.hasErrors()) reject('Error occurred during webpack compilation step')
         resolve()
       })

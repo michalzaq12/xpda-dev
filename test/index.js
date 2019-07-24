@@ -1,4 +1,3 @@
-
 const path = require('path');
 const {Pipeline, Logger} = require('../lib');
 const {Webpack} = require('../lib/step');
@@ -7,14 +6,10 @@ const {Electron} = require('../lib/launcher');
 
 
 const launcher = new Electron({
+  logger: new Logger('Electron', 'green'),
   entryFile: path.join(__dirname, './outElectron/index.js')
-}, new Logger('Electron', 'green'))
+})
 
-
-const pipe = new Pipeline({
-    isDevelopment: true,
-    launcher: launcher
-});
 
 
 const webpackConfig = Webpack.getBaseConfig({
@@ -26,7 +21,18 @@ const webpackConfig = Webpack.getBaseConfig({
   }
 })
 
-pipe.addStep(new Webpack(webpackConfig, new Logger('webpack', 'red')))
+const webpackStep = new Webpack({
+  logger: new Logger('webpack', 'red'),
+  webpackConfig: webpackConfig,
+  launcher: launcher
+})
+
+
+const pipe = new Pipeline({
+  isDevelopment: true,
+  steps: [webpackStep],
+  launcher: launcher,
+});
 
 
 pipe.build();

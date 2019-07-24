@@ -1,16 +1,18 @@
+import { Configuration, LibraryTarget, Plugin } from 'webpack'
+
 export interface IWebpackConfigBase {
   mode: 'development' | 'production'
   entry: string
   output: {
     filename?: string
     path: string
-    libraryTarget?: string
+    libraryTarget?: LibraryTarget
   }
-  plugins?: Array<object>
+  plugins?: Plugin[]
   extensions?: Array<string>
 }
 
-export function getBaseConfig(config: IWebpackConfigBase) {
+export function getBaseConfig(config: IWebpackConfigBase): Configuration {
   const nodeExternals = require('webpack-node-externals')
 
   return {

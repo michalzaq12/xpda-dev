@@ -6,6 +6,7 @@ import { ILogger } from '../utils/ILogger'
 import { ILauncher } from './ILauncher'
 
 export interface IElectronConfig {
+  logger: ILogger
   entryFile: string
   inspectionPort?: number
   relaunchCode?: number
@@ -19,12 +20,12 @@ export class Electron extends EventEmitter implements ILauncher {
   private process: ChildProcess = null
   public logger: ILogger
 
-  constructor(config: IElectronConfig, logger: ILogger) {
+  constructor(config: IElectronConfig) {
     super()
     this.entryFile = config.entryFile
     this.relaunchCode = config.relaunchCode || 250
     this.inspectionPort = config.inspectionPort || 5858
-    this.logger = logger
+    this.logger = config.logger
     this.logger.ignore(text => text.includes('source: chrome-devtools://devtools/bundled/shell.js (108)'))
     this.redirectStdout(this.logger)
   }
