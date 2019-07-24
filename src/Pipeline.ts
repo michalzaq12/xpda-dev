@@ -1,6 +1,5 @@
 import { Logger } from './utils/logger'
 import * as del from 'del'
-import { ElectronApp, IElectronConfig } from './launchers/Electron'
 import { IStep } from './steps/IStep'
 import { cleanupAndExit } from './cleanup'
 import { ILauncher } from './launchers/ILauncher'

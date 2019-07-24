@@ -7,7 +7,7 @@ const {Electron} = require('../lib/launcher');
 
 
 const launcher = new Electron({
-  entryFile: path.join(__dirname, './data/dummyMain.js')
+  entryFile: path.join(__dirname, './outElectron/index.js')
 }, new Logger('Electron', 'green'))
 
 
@@ -16,7 +16,17 @@ const pipe = new Pipeline({
     launcher: launcher
 });
 
-pipe.addStep(new Webpack({}, new Logger('webpack', 'red')))
+
+const webpackConfig = Webpack.getBaseConfig({
+  mode: "development",
+  entry: path.join(__dirname, './data/dummyElectron.js'),
+  output: {
+    filename: 'index.js',
+    path: path.join(__dirname, './outElectron'),
+  }
+})
+
+pipe.addStep(new Webpack(webpackConfig, new Logger('webpack', 'red')))
 
 
 pipe.build();

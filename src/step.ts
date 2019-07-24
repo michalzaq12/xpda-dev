@@ -1,2 +1,2 @@
-export * from './steps/Webpack'
+export * from './steps/webpack/Webpack'
 export * from './steps/Timer'
