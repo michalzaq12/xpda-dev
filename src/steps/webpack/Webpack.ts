@@ -1,9 +1,10 @@
 import { IStep } from '../IStep'
 import { ILogger } from '../../logger/ILogger'
+import { ILauncher } from '../../launchers/ILauncher'
 import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
-import { ILauncher } from '../../launchers/ILauncher'
+import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
 
 export class Webpack implements IStep {
   readonly logger: ILogger
@@ -79,5 +80,9 @@ export class Webpack implements IStep {
 
   static getBabelConfig(config: IWebpackConfigBabel) {
     return getBabelConfig(config)
+  }
+
+  static getTypescriptConfig(config: IWebpackConfigTypescript) {
+    return getTypescriptConfig(config)
   }
 }

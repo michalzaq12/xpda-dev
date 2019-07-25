@@ -12,9 +12,10 @@ const launcher = new Electron({
 
 
 
-const webpackConfig = Webpack.getBaseConfig({
+const webpackConfig = Webpack.getTypescriptConfig({
+  tsconfig: path.join(__dirname, './data/tsconfig.json'),
   mode: "development",
-  entry: path.join(__dirname, './data/electronJS.js'),
+  entry: path.join(__dirname, './data/electronTS.ts'),
   output: {
     filename: 'index.js',
     path: path.join(__dirname, './outElectron'),
@@ -30,7 +31,7 @@ const webpackStep = new Webpack({
 
 const pipe = new Pipeline({
   isDevelopment: true,
-  steps: [webpackStep, new Timer(new Logger('timer', 'black'))],
+  steps: [webpackStep],
   launcher: launcher,
 });
 

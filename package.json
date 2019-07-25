@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/michalzaq12/electron-dev-kit#readme",
   "optionalDependencies": {
-    "electron": "^5.0.0"
+    "electron": "^5.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "@hapi/joi": "^15.1.0",
