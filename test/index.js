@@ -1,5 +1,5 @@
 const path = require('path');
-const {Pipeline, Logger} = require('../lib');
+const {Pipeline, Logger, ElectronBuilder} = require('../lib');
 const {Webpack, Timer} = require('../lib/step');
 const {Electron} = require('../lib/launcher');
 
@@ -27,11 +27,15 @@ const webpackStep = new Webpack({
   launcher: launcher
 })
 
+const builder = new ElectronBuilder({
+  logger: new Logger('Electron-builder', 'teal')
+})
 
 const pipe = new Pipeline({
-  isDevelopment: true,
-  steps: [webpackStep, new Timer(new Logger('timer', 'black'))],
+  isDevelopment: false,
+  steps: [webpackStep],
   launcher: launcher,
+  builder: builder
 });
 
 

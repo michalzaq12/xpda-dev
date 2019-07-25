@@ -5,10 +5,12 @@ import { cleanupAndExit } from './cleanup'
 import { ILauncher } from './launchers/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
 import { pipelineLogger as basePipelineLogger } from './logger/pipelineLogger'
+import { IBuilder } from './builder/IBuilder'
 
 export interface IConfig {
   isDevelopment: boolean
   launcher: ILauncher
+  builder?: IBuilder
   pipelineLogger?: IPipelineLogger
   steps?: Array<IStep>
 }
@@ -16,14 +18,16 @@ export interface IConfig {
 export class Pipeline {
   private static instances: Array<Pipeline> = []
 
+  private readonly isDev: boolean
+  private readonly builder: IBuilder
   private launcher: ILauncher
-  readonly config: IConfig
   private steps: Array<IStep>
   private readonly logger: IPipelineLogger
 
   constructor(config: IConfig) {
     Pipeline.instances.push(this)
-    this.config = config
+    this.isDev = config.isDevelopment
+    this.builder = config.builder || null
     this.launcher = config.launcher
     this.steps = config.steps || []
     this.logger = config.pipelineLogger || basePipelineLogger
@@ -51,26 +55,42 @@ export class Pipeline {
 
   public build() {
     this.attachLoggers()
-    const text = this.config.isDevelopment ? 'starting development env...' : 'building for production'
-    this.logger.spinnerStart(text)
+    this.logger.spinnerStart('starting ...')
 
     const promises = []
 
     this.steps.forEach(builder => {
-      promises.push(builder.build(this.config.isDevelopment))
+      promises.push(builder.build(this.isDev))
     })
 
     Promise.all(promises)
       .then(async () => {
-        if (this.config.isDevelopment) await this.launcher.launch()
-        this.logger.spinnerSucceed('Done')
-        if (!this.config.isDevelopment) await cleanupAndExit(0)
+        try {
+          if (this.isDev) await this.buildDevelopment()
+          else await this.buildProduction()
+        } catch (e) {
+          this.logger.spinnerFail(e.message)
+        }
       })
       .catch(async err => {
         //TODO error toString()
         this.logger.spinnerFail(err || 'Something went wrong')
         await cleanupAndExit(1)
       })
+  }
+
+  private async buildDevelopment() {
+    await this.launcher.launch()
+    this.logger.spinnerSucceed('All steps completed. Waiting for file changes ...')
+  }
+
+  private async buildProduction() {
+    this.logger.spinnerSucceed('All steps completed.')
+    if (this.builder === null) return await cleanupAndExit(0)
+    this.logger.spinnerStart('Building app for distribution')
+    await this.builder.build()
+    this.logger.spinnerSucceed('Build completed')
+    await cleanupAndExit(0)
   }
 
   static async stopAllPipelines() {
@@ -81,16 +101,4 @@ export class Pipeline {
     await Promise.all(promises)
     this.instances = []
   }
-
-  //TODO: move to electron launcher
-  // static cleanBuildDirectory() {
-  //   try {
-  //     del.sync(['dist/main/*', '!.gitkeep'])
-  //     del.sync(['dist/renderer/*', '!.gitkeep'])
-  //     del.sync(['build/**/*.pak'])
-  //   } catch (err) {
-  //     Logger.spinnerFail('Error occurred when cleaning build directory', err)
-  //     cleanupAndExit(1)
-  //   }
-  // }
 }
