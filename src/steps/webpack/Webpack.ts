@@ -6,7 +6,7 @@ import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { ILauncher } from '../../launchers/ILauncher'
 
 export class Webpack implements IStep {
-  private readonly logger: ILogger
+  readonly logger: ILogger
   readonly webpackConfig: Configuration
   private readonly compiler: Compiler
   private watching: Watching = null

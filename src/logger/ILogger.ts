@@ -1,4 +1,5 @@
 import { Writable } from 'stream'
+import { IPipelineLogger } from './IPipelineLogger'
 
 export interface ILogger {
   readonly stdout: Writable
@@ -6,4 +7,5 @@ export interface ILogger {
   info(text: string)
   error(text: string)
   ignore(test: (text: string) => boolean)
+  setPipelineLogger(pipelineLogger: IPipelineLogger)
 }

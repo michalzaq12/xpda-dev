@@ -19,7 +19,7 @@ export class Pipeline {
   private launcher: ILauncher
   readonly config: IConfig
   private steps: Array<IStep>
-  private logger: IPipelineLogger
+  private readonly logger: IPipelineLogger
 
   constructor(config: IConfig) {
     Pipeline.instances.push(this)
@@ -44,7 +44,13 @@ export class Pipeline {
     await this.launcher.exit()
   }
 
+  private attachLoggers() {
+    this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
+    this.launcher.logger.setPipelineLogger(this.logger)
+  }
+
   public build() {
+    this.attachLoggers()
     const text = this.config.isDevelopment ? 'starting development env...' : 'building for production'
     this.logger.spinnerStart(text)
 

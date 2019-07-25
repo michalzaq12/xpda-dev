@@ -13,11 +13,11 @@ export interface IElectronConfig {
 }
 
 export class Electron extends EventEmitter implements ILauncher {
+  readonly logger: ILogger
   readonly relaunchCode: number
   readonly inspectionPort: number
   readonly entryFile: string
   private process: ChildProcess = null
-  public logger: ILogger
 
   constructor(config: IElectronConfig) {
     super()

@@ -11,10 +11,10 @@ export class Logger implements ILogger {
   private ignoreFunction: Function
   private pipelineLogger: IPipelineLogger
 
-  constructor(loggerName, color, pipelineLogger?: IPipelineLogger) {
+  constructor(loggerName, color) {
     this.loggerName = loggerName
     this.color = color
-    this.pipelineLogger = pipelineLogger || basePipelineLogger
+    this.pipelineLogger = basePipelineLogger
     this.initStreams()
   }
 
@@ -55,5 +55,9 @@ export class Logger implements ILogger {
 
   ignore(ignoreFunc) {
     this.ignoreFunction = ignoreFunc
+  }
+
+  setPipelineLogger(pipelineLogger: IPipelineLogger) {
+    this.pipelineLogger = pipelineLogger
   }
 }

@@ -3,7 +3,7 @@ import { ILogger } from '../logger/ILogger'
 
 export class Timer implements IStep {
   private timeout
-  private readonly logger: ILogger
+  readonly logger: ILogger
 
   constructor(logger: ILogger) {
     this.logger = logger
