@@ -1,6 +1,6 @@
 const path = require('path');
 const {Pipeline, Logger} = require('../lib');
-const {Webpack} = require('../lib/step');
+const {Webpack, Timer} = require('../lib/step');
 const {Electron} = require('../lib/launcher');
 
 
@@ -30,7 +30,7 @@ const webpackStep = new Webpack({
 
 const pipe = new Pipeline({
   isDevelopment: true,
-  steps: [webpackStep],
+  steps: [webpackStep, new Timer(new Logger('timer', 'black'))],
   launcher: launcher,
 });
 
