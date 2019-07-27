@@ -5,6 +5,7 @@ import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpac
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
+import { PipelineError } from '../../error/PipelineError'
 
 export class Webpack implements IStep {
   readonly logger: ILogger
@@ -25,12 +26,12 @@ export class Webpack implements IStep {
     }
   }
 
-  build(isDev: boolean): Promise<void> {
+  async build(isDev: boolean) {
     this.logger.info('webpack build')
     return isDev ? this.watch() : this.run()
   }
 
-  terminate(): Promise<void> {
+  async terminate() {
     this.logger.info('webpack terminate')
     return new Promise(resolve => {
       if (this.watching === null) resolve()
@@ -51,7 +52,7 @@ export class Webpack implements IStep {
     )
   }
 
-  private async watch(): Promise<void> {
+  private async watch() {
     return new Promise(resolve => {
       this.watching = this.compiler.watch({ ignored: /node_modules/, aggregateTimeout: 3000 }, (err, stats) => {
         if (err) this.logger.error(err.message)
@@ -64,11 +65,11 @@ export class Webpack implements IStep {
     })
   }
 
-  private async run(): Promise<void> {
+  private async run() {
     return new Promise((resolve, reject) => {
       this.compiler.run((err, stats) => {
         this.logStats(stats)
-        if (err || stats.hasErrors()) reject('Error occurred during webpack compilation step')
+        if (err || stats.hasErrors()) reject(new PipelineError('Webpack stats contains error'))
         resolve()
       })
     })
