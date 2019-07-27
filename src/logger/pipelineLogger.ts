@@ -31,6 +31,7 @@ export const pipelineLogger: IPipelineLogger = {
   },
 
   spinnerFail(error: Error | string) {
+    //TODO refactor
     if (typeof error === 'string') {
       spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(error))
     } else if (error instanceof Error) {
@@ -67,10 +68,10 @@ export const pipelineLogger: IPipelineLogger = {
     const time = new Date().toLocaleTimeString()
     let title = chalk.keyword('white').bgKeyword(color)(`\n  ${name}  `)
     title += chalk.gray(' [' + time + ']')
-    console.log(title)
+    process.stdout.write(title + '\n')
   },
 
-  log(loggerName, loggerColor, text, textColor?) {
+  log(loggerName: string, loggerColor: string, text: string) {
     if (text.trim() === '' || text.trim() === ' ') return
     this._clearSpinner()
     this._printTitle(loggerName, loggerColor)
@@ -78,8 +79,7 @@ export const pipelineLogger: IPipelineLogger = {
       .split(/\r?\n/)
       .map(el => chalk.keyword(loggerColor)('│  ') + el)
       .join('\n')
-    if (textColor !== undefined) process.stdout.write(chalk.keyword(textColor)(text))
-    else process.stdout.write(text)
+    process.stdout.write(text)
     process.stdout.write('\n')
     this.lastActiveLoggerName = loggerName
   },

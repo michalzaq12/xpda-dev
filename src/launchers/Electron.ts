@@ -81,6 +81,6 @@ export class Electron extends EventEmitter implements ILauncher {
   private pipe(logger: ILogger) {
     if (!this.isRunning) return
     this.process.stdout.pipe(logger.stdout)
-    this.process.stderr.pipe(logger.stderr)
+    this.process.stderr.pipe(logger.stdout)
   }
 }

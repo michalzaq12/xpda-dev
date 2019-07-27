@@ -1,4 +1,4 @@
-import * as execa from 'execa'
+import { log } from 'builder-util/out/log'
 import { build, CliOptions } from 'electron-builder'
 import { IBuilder } from './IBuilder'
 import { ILogger } from '../logger/ILogger'
@@ -13,23 +13,15 @@ export class ElectronBuilder implements IBuilder {
   }
 
   async build() {
-    const commandArguments = this.configPath ? [`--config ${this.configPath}`] : []
-    const command = execa('electron-builder', commandArguments)
-    command.stdout.pipe(this.logger.stdout)
-    await command
+    // @ts-ignore
+    log.stream = this.logger.stdout
+    try {
+      await build({
+        config: this.configPath,
+      })
+    } catch (e) {
+      this.logger.error(e)
+      throw new Error('Error occurred when building application')
+    }
   }
 }
-
-// var options = {
-//   platform: 'osx',
-//   out: 'release/osx',
-//   config: config,
-//   appPath: 'release/osx/Application.app,
-//   basePath: '.'
-// };
-//
-// // create the installer
-// var electronBuilder = builder.init();
-// electronBuilder.build(options, function(){
-//   // other stuff here
-// });

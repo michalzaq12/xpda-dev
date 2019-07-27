@@ -1,9 +1,8 @@
-import { Writable } from 'stream'
+type WritableStream = NodeJS.WritableStream
 import { IPipelineLogger } from './IPipelineLogger'
 
 export interface ILogger {
-  readonly stdout: Writable
-  readonly stderr: Writable
+  readonly stdout: WritableStream
   info(text: string)
   error(text: string)
   ignore(test: (text: string) => boolean)
