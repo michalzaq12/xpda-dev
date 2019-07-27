@@ -30,8 +30,16 @@ export const pipelineLogger: IPipelineLogger = {
     spinnerTitle = text
   },
 
-  spinnerFail(text: string) {
-    spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(text))
+  spinnerFail(error: Error | string) {
+    if (typeof error === 'string') {
+      spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(error))
+    } else if (error instanceof Error) {
+      spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(error.message))
+      console.log(error)
+    } else {
+      spinner.fail()
+      console.log(error)
+    }
   },
 
   spinnerInfo(text: string) {
@@ -48,14 +56,24 @@ export const pipelineLogger: IPipelineLogger = {
     spinner.succeed(formatSpinnerTitle() + chalk.underline(text))
   },
 
+  _clearSpinner() {
+    if (!spinner.isSpinning) return
+    readline.clearLine(process.stdout, 0)
+    readline.cursorTo(process.stdout, 0)
+  },
+
+  _printTitle(name: string, color: string) {
+    if (this.lastActiveLoggerName === name) return
+    const time = new Date().toLocaleTimeString()
+    let title = chalk.keyword('white').bgKeyword(color)(`\n  ${name}  `)
+    title += chalk.gray(' [' + time + ']')
+    console.log(title)
+  },
+
   log(loggerName, loggerColor, text, textColor?) {
     if (text.trim() === '' || text.trim() === ' ') return
-    if (spinner.isSpinning) {
-      readline.clearLine(process.stdout, 0)
-      readline.cursorTo(process.stdout, 0)
-    }
-    if (this.lastActiveLoggerName !== loggerName)
-      console.log(chalk.keyword('white').bgKeyword(loggerColor)(`\n  ${loggerName}  `))
+    this._clearSpinner()
+    this._printTitle(loggerName, loggerColor)
     text = text
       .split(/\r?\n/)
       .map(el => chalk.keyword(loggerColor)('│  ') + el)

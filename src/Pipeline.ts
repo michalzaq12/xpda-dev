@@ -1,5 +1,3 @@
-import { Logger } from './logger/Logger'
-import * as del from 'del'
 import { IStep } from './steps/IStep'
 import { cleanupAndExit } from './cleanup'
 import { ILauncher } from './launchers/ILauncher'
@@ -69,7 +67,7 @@ export class Pipeline {
           if (this.isDev) await this.buildDevelopment()
           else await this.buildProduction()
         } catch (e) {
-          this.logger.spinnerFail(e.message)
+          this.logger.spinnerFail(e)
         }
       })
       .catch(async err => {
