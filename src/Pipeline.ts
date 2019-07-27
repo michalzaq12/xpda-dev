@@ -1,5 +1,5 @@
 import { IStep } from './steps/IStep'
-import { cleanupAndExit } from './cleanup'
+import { onProcessExit } from './utils/onProcessExit'
 import { ILauncher } from './launchers/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
 import { pipelineLogger as basePipelineLogger } from './logger/pipelineLogger'
@@ -11,28 +11,31 @@ export interface IConfig {
   builder?: IBuilder
   pipelineLogger?: IPipelineLogger
   steps?: Array<IStep>
+  attachToProcess: boolean
 }
 
 export class Pipeline {
-  private static instances: Array<Pipeline> = []
-
   private readonly isDev: boolean
   private readonly builder: IBuilder
   private launcher: ILauncher
   private steps: Array<IStep>
   private readonly logger: IPipelineLogger
 
-  constructor(config: IConfig) {
-    Pipeline.instances.push(this)
+  constructor(readonly config: IConfig) {
     this.isDev = config.isDevelopment
     this.builder = config.builder || null
     this.launcher = config.launcher
     this.steps = config.steps || []
     this.logger = config.pipelineLogger || basePipelineLogger
+    this.init()
+  }
+
+  private init() {
+    if (this.config.attachToProcess) onProcessExit(this.stop.bind(this))
     this.launcher.on('relaunch', () => this.logger.spinnerInfo('Relaunching electron... '))
     this.launcher.on('exit', async code => {
       this.logger.spinnerInfo('Killing all processes... (reason: electron app close event) ')
-      await cleanupAndExit(code)
+      this.stop()
     })
   }
 
@@ -46,13 +49,13 @@ export class Pipeline {
     await this.launcher.exit()
   }
 
-  private attachLoggers() {
+  private beforeBuild() {
     this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
     this.launcher.logger.setPipelineLogger(this.logger)
   }
 
   public build() {
-    this.attachLoggers()
+    this.beforeBuild()
     this.logger.spinnerStart('starting ...')
 
     const promises = []
@@ -73,7 +76,7 @@ export class Pipeline {
       .catch(async err => {
         //TODO error toString()
         this.logger.spinnerFail(err || 'Something went wrong')
-        await cleanupAndExit(1)
+        process.exit(1)
       })
   }
 
@@ -84,19 +87,10 @@ export class Pipeline {
 
   private async buildProduction() {
     this.logger.spinnerSucceed('All steps completed.')
-    if (this.builder === null) return await cleanupAndExit(0)
+    if (this.builder === null) return process.exit(0)
     this.logger.spinnerStart('Building app for distribution')
     await this.builder.build()
     this.logger.spinnerSucceed('Build completed')
-    await cleanupAndExit(0)
-  }
-
-  static async stopAllPipelines() {
-    const promises = []
-    this.instances.forEach(pipeline => {
-      promises.push(pipeline.stop())
-    })
-    await Promise.all(promises)
-    this.instances = []
+    process.exit(0)
   }
 }
