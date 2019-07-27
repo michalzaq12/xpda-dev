@@ -1,7 +1,5 @@
 const path = require('path');
-const {Pipeline, Logger} = require('../lib');
-const {Webpack, Timer} = require('../lib/step');
-const {Electron} = require('../lib/launcher');
+const {Pipeline, Logger, Webpack, Electron} = require('../lib');
 
 
 

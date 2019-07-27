@@ -1,8 +1,5 @@
 const path = require('path');
-const {Pipeline, Logger, ElectronBuilder} = require('../lib');
-const {Webpack, Timer} = require('../lib/step');
-const {Electron} = require('../lib/launcher');
-
+const {Pipeline, Logger, ElectronBuilder, Webpack, Electron} = require('../lib');
 
 
 const launcher = new Electron({
