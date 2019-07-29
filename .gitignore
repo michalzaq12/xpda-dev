@@ -64,3 +64,6 @@ typings/
 lib
 
 .idea
+
+
+test/out

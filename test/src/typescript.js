@@ -1,21 +1,21 @@
 const path = require('path');
-const {Pipeline, Logger, Webpack, Electron} = require('../lib');
+const {Pipeline, Logger, Webpack, Electron} = require('../../lib/index');
 
 
 
 const launcher = new Electron({
   logger: new Logger('Electron', 'green'),
-  entryFile: path.join(__dirname, './outElectron/index.js')
+  entryFile: path.join(__dirname, '../out/electron-typescript/index.js')
 })
 
 
 
 const webpackConfig = Webpack.getTypescriptConfig({
-  tsconfig: path.join(__dirname, './data/tsconfig.json'),
-  entry: path.join(__dirname, './data/electronTS.ts'),
+  tsconfig: path.join(__dirname, '../fixtures/electron-typescript/tsconfig.json'),
+  entry: path.join(__dirname, '../fixtures/electron-typescript/index.ts'),
   output: {
     filename: 'index.js',
-    path: path.join(__dirname, './outElectron'),
+    path: path.join(__dirname, '../out/electron-typescript'),
   }
 })
 
