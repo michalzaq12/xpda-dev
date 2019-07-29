@@ -54,9 +54,9 @@ export class Pipeline {
     this.launcher.logger.setPipelineLogger(this.logger)
   }
 
-  public build() {
+  async build() {
     this.beforeBuild()
-    this.logger.spinnerStart('starting ...')
+    this.logger.spinnerStart('Starting ...')
 
     const promises = []
 
@@ -64,18 +64,18 @@ export class Pipeline {
       promises.push(builder.build(this.isDev))
     })
 
-    Promise.all(promises)
+    return Promise.all(promises)
       .then(async () => {
         try {
           if (this.isDev) await this.buildDevelopment()
           else await this.buildProduction()
         } catch (e) {
           this.logger.spinnerFail(e)
+          process.exit(1)
         }
       })
-      .catch(async err => {
-        //TODO error toString()
-        this.logger.spinnerFail(err || 'Something went wrong')
+      .catch(async e => {
+        this.logger.spinnerFail(e)
         process.exit(1)
       })
   }

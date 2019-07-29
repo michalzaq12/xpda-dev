@@ -8,18 +8,15 @@ export class ElectronBuilder implements IBuilder {
   readonly logger: ILogger
   readonly configPath?: string
 
-  constructor(config: { logger: ILogger; configPath?: string }) {
+  constructor(readonly config: { logger: ILogger; options?: CliOptions }) {
     this.logger = config.logger
-    this.configPath = config.configPath
   }
 
   async build() {
     // @ts-ignore
     log.stream = this.logger.stdout
     try {
-      await build({
-        config: this.configPath,
-      })
+      await build(this.config.options)
     } catch (e) {
       this.logger.error(e)
       throw new PipelineError('Error occurred when building application')
