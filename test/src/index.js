@@ -1,8 +1,8 @@
 const path = require('path');
-const {Pipeline, Logger, ElectronBuilder, Webpack, Electron} = require('../../lib/index');
+const {Pipeline, Logger, ElectronBuilder, Webpack, ElectronLauncher} = require('../../lib/index');
 
 
-const launcher = new Electron({
+const launcher = new ElectronLauncher({
   logger: new Logger('Electron', 'green'),
   entryFile: path.join(__dirname, '../out/electron-simple/index.js')
 })

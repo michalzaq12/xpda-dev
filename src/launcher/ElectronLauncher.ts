@@ -12,7 +12,7 @@ export interface IElectronConfig {
   relaunchCode?: number
 }
 
-export class Electron extends EventEmitter implements ILauncher {
+export class ElectronLauncher extends EventEmitter implements ILauncher {
   readonly logger: ILogger
   readonly relaunchCode: number
   readonly inspectionPort: number

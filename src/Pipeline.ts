@@ -1,6 +1,6 @@
 import { IStep } from './steps/IStep'
 import { onProcessExit } from './utils/onProcessExit'
-import { ILauncher } from './launchers/ILauncher'
+import { ILauncher } from './launcher/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
 import { pipelineLogger as basePipelineLogger } from './logger/pipelineLogger'
 import { IBuilder } from './builder/IBuilder'

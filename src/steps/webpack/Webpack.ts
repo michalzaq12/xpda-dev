@@ -1,6 +1,6 @@
 import { IStep } from '../IStep'
 import { ILogger } from '../../logger/ILogger'
-import { ILauncher } from '../../launchers/ILauncher'
+import { ILauncher } from '../../launcher/ILauncher'
 import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import * as webpack from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
