@@ -75,7 +75,7 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
     // @ts-ignore
     this.process.stderr.end()
 
-    await killWithAllSubProcess(this.pid, this.logger.error.bind(this))
+    await killWithAllSubProcess(this.pid, this.logger.error.bind(this.logger))
     this.process = null
   }
 

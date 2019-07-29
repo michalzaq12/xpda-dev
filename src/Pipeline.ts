@@ -2,7 +2,7 @@ import { IStep } from './steps/IStep'
 import { onProcessExit } from './utils/onProcessExit'
 import { ILauncher } from './launcher/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
-import { pipelineLogger as basePipelineLogger } from './logger/pipelineLogger'
+import { PipelineLogger } from './logger/pipelineLogger'
 import { IBuilder } from './builder/IBuilder'
 
 export interface IConfig {
@@ -27,22 +27,20 @@ export class Pipeline {
     this.builder = config.builder || null
     this.launcher = config.launcher
     this.steps = config.steps || []
-    this.logger = config.pipelineLogger || basePipelineLogger
-    this.logger.setSpinnerTitle(this.config.title)
+    this.logger = config.pipelineLogger || new PipelineLogger({ title: this.config.title })
     this.init()
   }
 
   private init() {
+    this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
+    this.launcher.logger.setPipelineLogger(this.logger)
+    if (this.builder !== null) this.builder.logger.setPipelineLogger(this.logger)
     if (this.config.attachToProcess) onProcessExit(this.stop.bind(this))
     this.launcher.on('relaunch', () => this.logger.spinnerInfo('Relaunching electron... '))
     this.launcher.on('exit', async code => {
-      this.logger.spinnerInfo('Killing all processes... (reason: electron app close event) ')
+      this.logger.spinnerInfo('Killing all processes... (reason: launcher close event) ')
       this.stop()
     })
-  }
-
-  addStep(step: IStep) {
-    this.steps.push(step)
   }
 
   async stop() {
@@ -57,7 +55,6 @@ export class Pipeline {
   }
 
   async build() {
-    this.beforeBuild()
     this.logger.spinnerStart('Starting ...')
 
     const promises = []

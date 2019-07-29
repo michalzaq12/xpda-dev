@@ -1,7 +1,6 @@
 import { Writable } from 'stream'
 import { ILogger } from './ILogger'
 import { IPipelineLogger } from './IPipelineLogger'
-import { pipelineLogger as basePipelineLogger } from './pipelineLogger'
 import { Console } from 'console'
 type WritableStream = NodeJS.WritableStream
 
@@ -14,7 +13,6 @@ export class Logger implements ILogger {
   private buffer: Array<Buffer> = []
 
   constructor(readonly name: string, readonly color: string) {
-    this.pipelineLogger = basePipelineLogger
     this.initStream()
     this.errorLogger = new Console(this.stdout)
   }
