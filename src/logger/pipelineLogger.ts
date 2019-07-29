@@ -18,7 +18,8 @@ const staticLogger = ora({
 let spinnerTitle = 'Title'
 
 function formatSpinnerTitle() {
-  return chalk.bold(spinnerTitle) + ': '
+  process.stdout.write('\n')
+  return chalk.underline.bold(spinnerTitle) + ': '
 }
 
 export const pipelineLogger: IPipelineLogger = {
@@ -31,9 +32,9 @@ export const pipelineLogger: IPipelineLogger = {
   spinnerFail(error: Error | string) {
     //TODO refactor
     if (typeof error === 'string') {
-      spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(error))
+      spinner.fail(formatSpinnerTitle() + chalk.redBright(error))
     } else if (error instanceof Error) {
-      spinner.fail(formatSpinnerTitle() + chalk.underline.redBright(error.message))
+      spinner.fail(formatSpinnerTitle() + chalk.redBright(error.message))
       console.log(error)
     } else {
       spinner.fail()
@@ -42,17 +43,17 @@ export const pipelineLogger: IPipelineLogger = {
   },
 
   spinnerInfo(text: string) {
-    this.lastActiveLoggerName = ''
-    staticLogger.info(formatSpinnerTitle() + chalk.underline(text))
+    this.lastActiveTitle = ''
+    staticLogger.info(formatSpinnerTitle() + text)
   },
 
   spinnerStart(text?: string) {
-    if (text !== undefined) spinner.text = formatSpinnerTitle() + chalk.underline(text)
+    if (text !== undefined) spinner.text = formatSpinnerTitle() + text
     spinner.start()
   },
 
   spinnerSucceed(text: string) {
-    spinner.succeed(formatSpinnerTitle() + chalk.underline(text))
+    spinner.succeed(formatSpinnerTitle() + text)
   },
 
   _clearSpinner() {
