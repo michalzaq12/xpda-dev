@@ -27,6 +27,7 @@ const webpackStep = new Webpack({
 
 
 const pipe = new Pipeline({
+  title: 'webpack-typescript',
   isDevelopment: true,
   steps: [webpackStep],
   launcher: launcher,

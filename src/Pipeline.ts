@@ -6,12 +6,13 @@ import { pipelineLogger as basePipelineLogger } from './logger/pipelineLogger'
 import { IBuilder } from './builder/IBuilder'
 
 export interface IConfig {
+  title: string
   isDevelopment: boolean
   launcher: ILauncher
   builder?: IBuilder
   pipelineLogger?: IPipelineLogger
   steps?: Array<IStep>
-  attachToProcess: boolean
+  attachToProcess?: boolean
 }
 
 export class Pipeline {
@@ -27,6 +28,7 @@ export class Pipeline {
     this.launcher = config.launcher
     this.steps = config.steps || []
     this.logger = config.pipelineLogger || basePipelineLogger
+    this.logger.setSpinnerTitle(this.config.title)
     this.init()
   }
 

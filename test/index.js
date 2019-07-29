@@ -28,6 +28,7 @@ const builder = new ElectronBuilder({
 })
 
 const pipe = new Pipeline({
+  title: 'webpack-simple',
   isDevelopment: false,
   steps: [webpackStep],
   launcher: launcher,
