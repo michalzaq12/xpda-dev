@@ -7,6 +7,7 @@ import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
 import { PipelineError } from '../../error/PipelineError'
+import { Logger } from '../..'
 
 export class Webpack implements IStep {
   readonly logger: ILogger
@@ -15,8 +16,8 @@ export class Webpack implements IStep {
   private watching: Watching = null
   private readonly launcher: ILauncher
 
-  constructor(config: { webpackConfig: Configuration; logger: ILogger; launcher: ILauncher }) {
-    this.logger = config.logger
+  constructor(config: { webpackConfig: Configuration; logger?: ILogger; launcher: ILauncher }) {
+    this.logger = config.logger || new Logger('Webpack', 'olive')
     this.webpackConfig = config.webpackConfig
     this.launcher = config.launcher
   }

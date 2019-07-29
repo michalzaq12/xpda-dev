@@ -4,10 +4,11 @@ import { EventEmitter } from 'events'
 import { killWithAllSubProcess } from '../utils/killProcess'
 import { ILogger } from '../logger/ILogger'
 import { ILauncher } from './ILauncher'
+import { Logger } from '..'
 
 export interface IElectronConfig {
-  logger: ILogger
   entryFile: string
+  logger?: ILogger
   inspectionPort?: number
   relaunchCode?: number
 }
@@ -24,7 +25,7 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
     this.entryFile = config.entryFile
     this.relaunchCode = config.relaunchCode || 250
     this.inspectionPort = config.inspectionPort || 5858
-    this.logger = config.logger
+    this.logger = config.logger || new Logger('Electron', 'teal')
     this.logger.ignore(text => text.includes('source: chrome-devtools://devtools/bundled/shell.js (108)'))
   }
 

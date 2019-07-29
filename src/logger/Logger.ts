@@ -6,8 +6,6 @@ import { Console } from 'console'
 type WritableStream = NodeJS.WritableStream
 
 export class Logger implements ILogger {
-  readonly loggerName: string
-  readonly color: string
   public stdout: WritableStream
   private ignoreFunction: Function
   private pipelineLogger: IPipelineLogger
@@ -15,9 +13,7 @@ export class Logger implements ILogger {
 
   private buffer: Array<Buffer> = []
 
-  constructor(loggerName, color) {
-    this.loggerName = loggerName
-    this.color = color
+  constructor(readonly name: string, readonly color: string) {
     this.pipelineLogger = basePipelineLogger
     this.initStream()
     this.errorLogger = new Console(this.stdout)
@@ -45,7 +41,7 @@ export class Logger implements ILogger {
 
   info(text: string) {
     if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
-    this.pipelineLogger.log(this.loggerName, this.color, text)
+    this.pipelineLogger.log(this.name, this.color, text)
   }
 
   error(text: Error | string) {

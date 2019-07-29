@@ -1,9 +1,8 @@
 const path = require('path');
-const {Pipeline, Logger, ElectronBuilder, Webpack, ElectronLauncher} = require('../../lib/index');
+const {Pipeline, ElectronBuilder, Webpack, ElectronLauncher} = require('../../lib/index');
 
 
 const launcher = new ElectronLauncher({
-  logger: new Logger('Electron', 'green'),
   entryFile: path.join(__dirname, '../out/electron-simple/index.js')
 })
 
@@ -18,14 +17,11 @@ const webpackConfig = Webpack.getBaseConfig({
 })
 
 const webpackStep = new Webpack({
-  logger: new Logger('webpack', 'red'),
   webpackConfig: webpackConfig,
   launcher: launcher
 })
 
-const builder = new ElectronBuilder({
-  logger: new Logger('Electron-builder', 'teal')
-})
+const builder = new ElectronBuilder()
 
 const pipe = new Pipeline({
   title: 'webpack-simple',
