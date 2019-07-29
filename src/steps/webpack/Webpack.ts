@@ -2,6 +2,7 @@ import { IStep } from '../IStep'
 import { ILogger } from '../../logger/ILogger'
 import { ILauncher } from '../../launchers/ILauncher'
 import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
+import * as webpack from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
@@ -10,7 +11,7 @@ import { PipelineError } from '../../error/PipelineError'
 export class Webpack implements IStep {
   readonly logger: ILogger
   readonly webpackConfig: Configuration
-  private readonly compiler: Compiler
+  private compiler: Compiler
   private watching: Watching = null
   private readonly launcher: ILauncher
 
@@ -18,16 +19,12 @@ export class Webpack implements IStep {
     this.logger = config.logger
     this.webpackConfig = config.webpackConfig
     this.launcher = config.launcher
-    try {
-      const webpack = require('webpack')
-      this.compiler = webpack(this.webpackConfig)
-    } catch (e) {
-      this.logger.error(e.message)
-    }
   }
 
   async build(isDev: boolean) {
     this.logger.info('webpack build')
+    this.webpackConfig.mode = isDev ? 'development' : 'production'
+    this.compiler = webpack(this.webpackConfig)
     return isDev ? this.watch() : this.run()
   }
 

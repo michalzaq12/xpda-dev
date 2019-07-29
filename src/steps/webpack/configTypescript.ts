@@ -4,13 +4,11 @@ import { Configuration } from 'webpack'
 
 export interface IWebpackConfigTypescript extends IWebpackConfigBase {
   tsconfig?: string
-  sourcemap?: boolean
 }
 
 export function getTypescriptConfig(config: IWebpackConfigTypescript): Configuration {
   const webpackConfig = getBaseConfig(config)
-  webpackConfig.resolve.extensions = ['.tsx', '.ts', '.js', '.json', '.node']
-  if (config.sourcemap) webpackConfig.devtool = 'inline-source-map'
+  webpackConfig.resolve.extensions.concat(['.tsx', '.ts'])
   webpackConfig.module.rules.push({
     test: /\.tsx?$/,
     use: [

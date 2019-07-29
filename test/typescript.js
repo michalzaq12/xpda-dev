@@ -12,7 +12,6 @@ const launcher = new Electron({
 
 const webpackConfig = Webpack.getTypescriptConfig({
   tsconfig: path.join(__dirname, './data/tsconfig.json'),
-  mode: "development",
   entry: path.join(__dirname, './data/electronTS.ts'),
   output: {
     filename: 'index.js',

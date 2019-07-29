@@ -1,7 +1,6 @@
-import { Configuration, LibraryTarget, Plugin } from 'webpack'
+import { Configuration, LibraryTarget, Plugin, Options } from 'webpack'
 
 export interface IWebpackConfigBase {
-  mode: 'development' | 'production'
   entry: string
   output: {
     filename?: string
@@ -10,13 +9,23 @@ export interface IWebpackConfigBase {
   }
   plugins?: Plugin[]
   extensions?: Array<string>
+  devtool?: Options.Devtool
+  target?:
+    | 'web'
+    | 'webworker'
+    | 'node'
+    | 'async-node'
+    | 'node-webkit'
+    | 'atom'
+    | 'electron'
+    | 'electron-renderer'
+    | 'electron-main'
 }
 
 export function getBaseConfig(config: IWebpackConfigBase): Configuration {
   const nodeExternals = require('webpack-node-externals')
 
   return {
-    mode: config.mode,
     entry: config.entry,
     externals: [
       nodeExternals({
@@ -40,8 +49,9 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
     },
     plugins: config.plugins || [],
     resolve: {
-      extensions: config.extensions || ['.js', '.json', '.node'],
+      extensions: ['.js', '.json', '.node'].concat(config.extensions || []),
     },
-    target: 'electron-main',
+    devtool: config.devtool,
+    target: config.target || 'electron-main',
   }
 }

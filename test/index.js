@@ -10,7 +10,6 @@ const launcher = new Electron({
 
 
 const webpackConfig = Webpack.getBaseConfig({
-  mode: "development",
   entry: path.join(__dirname, './data/electronJS.js'),
   output: {
     filename: 'index.js',
@@ -29,7 +28,7 @@ const builder = new ElectronBuilder({
 })
 
 const pipe = new Pipeline({
-  isDevelopment: true,
+  isDevelopment: false,
   steps: [webpackStep],
   launcher: launcher,
   builder: builder
