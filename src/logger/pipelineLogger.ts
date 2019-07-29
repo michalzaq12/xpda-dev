@@ -6,25 +6,23 @@ import chalk from 'chalk'
 const spinner = ora({
   text: 'Staring ...',
   stream: process.stdout,
-  indent: 9,
   color: 'white',
 })
 
 const staticLogger = ora({
   isEnabled: false,
   stream: process.stdout,
-  indent: 9,
   color: 'white',
 })
 
 let spinnerTitle = 'Title'
 
 function formatSpinnerTitle() {
-  return chalk.inverse(spinnerTitle) + ': '
+  return chalk.bold(spinnerTitle) + ': '
 }
 
 export const pipelineLogger: IPipelineLogger = {
-  lastActiveLoggerName: '',
+  lastActiveTitle: '',
 
   setSpinnerTitle(text) {
     spinnerTitle = text
@@ -63,24 +61,25 @@ export const pipelineLogger: IPipelineLogger = {
     readline.cursorTo(process.stdout, 0)
   },
 
-  _printTitle(name: string, color: string) {
-    if (this.lastActiveLoggerName === name) return
+  _printTitle(title: string, color: string) {
+    if (this.lastActiveTitle === title) return
     const time = new Date().toLocaleTimeString()
-    let title = chalk.keyword('white').bgKeyword(color)(`\n  ${name}  `)
-    title += chalk.gray(' [' + time + ']')
-    process.stdout.write(title + '\n')
+    let text = chalk.keyword('white').bgKeyword(color)(`\n  ${title}  `)
+    text += chalk.gray(' [' + time + ']')
+    process.stdout.write(text)
+    process.stdout.write('\n')
   },
 
-  log(loggerName: string, loggerColor: string, text: string) {
+  log(title: string, color: string, text: string) {
     if (text.trim() === '' || text.trim() === ' ') return
     this._clearSpinner()
-    this._printTitle(loggerName, loggerColor)
+    this._printTitle(title, color)
     text = text
       .split(/\r?\n/)
-      .map(el => chalk.keyword(loggerColor)('│  ') + el)
+      .map(el => chalk.keyword(color)('│  ') + el)
       .join('\n')
     process.stdout.write(text)
     process.stdout.write('\n')
-    this.lastActiveLoggerName = loggerName
+    this.lastActiveTitle = title
   },
 }

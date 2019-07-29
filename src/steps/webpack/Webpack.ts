@@ -22,14 +22,12 @@ export class Webpack implements IStep {
   }
 
   async build(isDev: boolean) {
-    this.logger.info('webpack build')
     this.webpackConfig.mode = isDev ? 'development' : 'production'
     this.compiler = webpack(this.webpackConfig)
     return isDev ? this.watch() : this.run()
   }
 
   async terminate() {
-    this.logger.info('webpack terminate')
     return new Promise(resolve => {
       if (this.watching === null) resolve()
       else

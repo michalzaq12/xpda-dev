@@ -1,7 +1,7 @@
 import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import { killWithAllSubProcess } from '../utils/kill-process'
+import { killWithAllSubProcess } from '../utils/killProcess'
 import { ILogger } from '../logger/ILogger'
 import { ILauncher } from './ILauncher'
 
@@ -74,7 +74,7 @@ export class Electron extends EventEmitter implements ILauncher {
     // @ts-ignore
     this.process.stderr.end()
 
-    await killWithAllSubProcess(this.pid)
+    await killWithAllSubProcess(this.pid, this.logger.error.bind(this))
     this.process = null
   }
 
