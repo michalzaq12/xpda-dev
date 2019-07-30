@@ -4,6 +4,11 @@ import ora, { Ora } from 'ora'
 import chalk from 'chalk'
 type WritableStream = NodeJS.WritableStream
 
+const SUCCEED = chalk.green('[SUCCEED] ')
+const START = chalk.blue('[START] ')
+const INFO = chalk.blue('[INFO] ')
+const FAIL = chalk.redBright('[FAIL] ')
+
 export interface IPipelineLoggerConfig {
   title: string
   stream?: WritableStream
@@ -59,7 +64,7 @@ export class PipelineLogger implements IPipelineLogger {
   spinnerFail(error: Error | string) {
     const message = typeof error === 'string' ? error : error.message || 'Error'
     const formattedText = this.formatSpinnerTitle() + chalk.redBright(message)
-    if (this.config.disableSpinner) this.writeToStream('[FAIL] ' + formattedText)
+    if (this.config.disableSpinner) this.writeToStream(FAIL + formattedText)
     else this.spinner.fail(formattedText)
     if (typeof error !== 'string') console.log(error)
   }
@@ -67,19 +72,19 @@ export class PipelineLogger implements IPipelineLogger {
   spinnerInfo(text: string) {
     this.lastActiveTitle = ''
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream('[INFO] ' + formattedText)
+    if (this.config.disableSpinner) return this.writeToStream(INFO + formattedText)
     this.staticSpinner.info(formattedText)
   }
 
   spinnerStart(text: string) {
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream('[START] ' + formattedText)
+    if (this.config.disableSpinner) return this.writeToStream(START + formattedText)
     this.spinner.start(formattedText)
   }
 
   spinnerSucceed(text: string) {
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream('[SUCCEED] ' + formattedText)
+    if (this.config.disableSpinner) return this.writeToStream(SUCCEED + formattedText)
     this.spinner.succeed(formattedText)
   }
 

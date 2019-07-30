@@ -27,7 +27,9 @@ export class Pipeline {
     this.builder = config.builder || null
     this.launcher = config.launcher
     this.steps = config.steps || []
-    this.logger = config.pipelineLogger || new PipelineLogger({ title: this.config.title })
+    this.logger =
+      config.pipelineLogger ||
+      new PipelineLogger({ title: this.config.title, disableSpinner: process.env.CI === 'true' })
     this.init()
   }
 
