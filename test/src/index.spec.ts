@@ -1,23 +1,20 @@
 import anyTest, { TestInterface } from 'ava'
 import { Pipeline, ILogger, ILauncher, IStep, IPipelineLogger } from '../../src'
-import { launcher } from './mocks/launcher'
-import { logger } from './mocks/logger'
-import { step } from './mocks/step'
-import { pipelineLogger } from './mocks/pipelineLogger'
+import { launcherStub, loggerStub, stepStub, pipelineLoggerStub } from './mocks'
 
 const test = anyTest as TestInterface<{
-  loggerMock: ILogger
-  launcherMock: ILauncher
-  stepMock: IStep
+  logger: ILogger
+  launcher: ILauncher
+  step: IStep
   pipelineLogger: IPipelineLogger
 }>
 
 test.beforeEach(t => {
   t.context = {
-    loggerMock: logger,
-    launcherMock: launcher,
-    stepMock: step,
-    pipelineLogger: pipelineLogger,
+    logger: loggerStub,
+    launcher: launcherStub,
+    step: stepStub,
+    pipelineLogger: pipelineLoggerStub,
   }
 })
 
@@ -25,15 +22,15 @@ test('pipeline should call step build function once', async t => {
   const pipeline = new Pipeline({
     title: 'test',
     isDevelopment: true,
-    steps: [t.context.stepMock],
-    launcher: t.context.launcherMock,
+    steps: [t.context.step],
+    launcher: t.context.launcher,
     pipelineLogger: t.context.pipelineLogger,
   })
-
-  //sinon.spy(t.context.stepMock, 'build');
 
   await pipeline.build()
 
   //@ts-ignore
-  t.true(t.context.stepMock.build.calledOnce)
+  t.true(t.context.step.build.calledOnce)
+  //@ts-ignore
+  t.true(t.context.launcher.launch.calledOnce)
 })
