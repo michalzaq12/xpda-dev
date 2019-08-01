@@ -1,4 +1,5 @@
 export * from './launcher'
+export * from './builder'
 export * from './logger'
 export * from './pipelineLogger'
 export * from './step'

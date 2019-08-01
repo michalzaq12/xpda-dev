@@ -1,5 +1,7 @@
 import { stubObject } from 'ts-sinon'
 import { IStep, Timer } from '../../../src'
-import { loggerStub } from './logger'
+import { getLoggerStub } from './logger'
 
-export const stepStub = stubObject<IStep>(new Timer(loggerStub))
+export function getStepStub() {
+  return stubObject<IStep>(new Timer(getLoggerStub()))
+}
