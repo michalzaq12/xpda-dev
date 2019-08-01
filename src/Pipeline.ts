@@ -32,7 +32,15 @@ export class Pipeline {
     this.steps = config.steps || []
     this.logger =
       config.pipelineLogger || new PipelineLogger({ title: this.title, disableSpinner: process.env.CI === 'true' })
+    this.validate()
     this.init()
+  }
+
+  private validate() {
+    if (this.isDev && this.launcher === null)
+      throw new PipelineError('You must pass launcher instance in development mode')
+    if (!this.isDev && this.builder === null)
+      throw new PipelineError('You must pass builder instance in production mode')
   }
 
   private init() {
@@ -79,13 +87,11 @@ export class Pipeline {
   }
 
   private async buildDevelopment() {
-    if (this.launcher === null) throw new PipelineError('You must pass launcher instance in development mode')
     await this.launcher.launch()
     this.logger.spinnerSucceed('All steps completed. Waiting for file changes ...')
   }
 
   private async buildProduction() {
-    if (this.builder === null) throw new PipelineError('You must pass builder instance in production mode')
     this.logger.spinnerSucceed('All steps completed.')
     if (this.builder === null) return process.exit(0)
     this.logger.spinnerStart('Building app for distribution')

@@ -1,25 +1,27 @@
 import { IStep } from './IStep'
 import { ILogger } from '../logger/ILogger'
+import { setTimeout, clearTimeout } from 'timers'
+import Timeout = NodeJS.Timeout
 
 export class Timer implements IStep {
-  private timeout
+  private handler: Timeout
+  private readonly timeout: number
   readonly logger: ILogger
 
-  constructor(logger: ILogger) {
+  constructor(logger: ILogger, timeout?: number) {
     this.logger = logger
+    this.timeout = timeout || 2000
   }
 
   build(): Promise<void> {
-    this.logger.info('build')
     return new Promise(resolve => {
-      this.timeout = setTimeout(() => resolve(), 2000)
+      this.handler = setTimeout(() => resolve(), this.timeout)
     })
   }
 
   terminate(): Promise<void> {
-    this.logger.info('terminate')
     return new Promise(resolve => {
-      clearTimeout(this.timeout)
+      clearTimeout(this.handler)
       resolve()
     })
   }
