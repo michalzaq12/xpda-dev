@@ -4,11 +4,12 @@ import { ILauncher } from './launcher/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
 import { PipelineLogger } from './logger/pipelineLogger'
 import { IBuilder } from './builder/IBuilder'
+import { PipelineError } from './error/PipelineError'
 
 export interface IConfig {
-  title: string
   isDevelopment: boolean
-  launcher: ILauncher
+  title?: string
+  launcher?: ILauncher
   builder?: IBuilder
   pipelineLogger?: IPipelineLogger
   steps?: Array<IStep>
@@ -16,26 +17,27 @@ export interface IConfig {
 }
 
 export class Pipeline {
+  private readonly title: string
   private readonly isDev: boolean
   private readonly builder: IBuilder
-  private launcher: ILauncher
+  private readonly launcher: ILauncher
   private steps: Array<IStep>
   private readonly logger: IPipelineLogger
 
   constructor(readonly config: IConfig) {
     this.isDev = config.isDevelopment
+    this.title = config.title || 'xpda-dev'
     this.builder = config.builder || null
-    this.launcher = config.launcher
+    this.launcher = config.launcher || null
     this.steps = config.steps || []
     this.logger =
-      config.pipelineLogger ||
-      new PipelineLogger({ title: this.config.title, disableSpinner: process.env.CI === 'true' })
+      config.pipelineLogger || new PipelineLogger({ title: this.title, disableSpinner: process.env.CI === 'true' })
     this.init()
   }
 
   private init() {
     this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
-    this.launcher.logger.setPipelineLogger(this.logger)
+    if (this.launcher !== null) this.launcher.logger.setPipelineLogger(this.logger)
     if (this.builder !== null) this.builder.logger.setPipelineLogger(this.logger)
     if (this.config.attachToProcess) onProcessExit(this.stop.bind(this))
     this.launcher.on('relaunch', () => this.logger.spinnerInfo('Relaunching electron... '))
@@ -49,11 +51,6 @@ export class Pipeline {
     for (const step of this.steps) await step.terminate()
     this.steps = []
     await this.launcher.exit()
-  }
-
-  private beforeBuild() {
-    this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
-    this.launcher.logger.setPipelineLogger(this.logger)
   }
 
   async build() {
@@ -82,11 +79,13 @@ export class Pipeline {
   }
 
   private async buildDevelopment() {
+    if (this.launcher === null) throw new PipelineError('You must pass launcher instance in development mode')
     await this.launcher.launch()
     this.logger.spinnerSucceed('All steps completed. Waiting for file changes ...')
   }
 
   private async buildProduction() {
+    if (this.builder === null) throw new PipelineError('You must pass builder instance in production mode')
     this.logger.spinnerSucceed('All steps completed.')
     if (this.builder === null) return process.exit(0)
     this.logger.spinnerStart('Building app for distribution')
