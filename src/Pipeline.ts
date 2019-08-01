@@ -73,6 +73,7 @@ export class Pipeline {
     return Promise.all(promises)
       .then(async () => {
         try {
+          this.logger.spinnerSucceed('All steps completed.')
           if (this.isDev) await this.buildDevelopment()
           else await this.buildProduction()
         } catch (e) {
@@ -88,15 +89,12 @@ export class Pipeline {
 
   private async buildDevelopment() {
     await this.launcher.launch()
-    this.logger.spinnerSucceed('All steps completed. Waiting for file changes ...')
+    this.logger.spinnerInfo('Waiting for file changes ...')
   }
 
   private async buildProduction() {
-    this.logger.spinnerSucceed('All steps completed.')
-    if (this.builder === null) return process.exit(0)
     this.logger.spinnerStart('Building app for distribution')
     await this.builder.build()
     this.logger.spinnerSucceed('Build completed')
-    process.exit(0)
   }
 }
