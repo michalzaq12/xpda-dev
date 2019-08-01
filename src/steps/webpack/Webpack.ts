@@ -14,9 +14,9 @@ export class Webpack implements IStep {
   readonly webpackConfig: Configuration
   private compiler: Compiler
   private watching: Watching = null
-  private readonly launcher: ILauncher
+  private readonly launcher: ILauncher = null
 
-  constructor(config: { webpackConfig: Configuration; logger?: ILogger; launcher: ILauncher }) {
+  constructor(config: { webpackConfig: Configuration; logger?: ILogger; launcher?: ILauncher }) {
     this.logger = config.logger || new Logger('Webpack', 'olive')
     this.webpackConfig = config.webpackConfig
     this.launcher = config.launcher
@@ -54,7 +54,7 @@ export class Webpack implements IStep {
         if (err) this.logger.error(err.message)
         else {
           this.logStats(stats)
-          this.launcher.relaunch()
+          if (this.launcher) this.launcher.relaunch()
         }
         resolve()
       })

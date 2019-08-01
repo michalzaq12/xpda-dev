@@ -14,6 +14,7 @@ export interface IConfig {
   pipelineLogger?: IPipelineLogger
   steps?: Array<IStep>
   attachToProcess?: boolean
+  buildOnlySteps?: boolean
 }
 
 export class Pipeline {
@@ -37,6 +38,7 @@ export class Pipeline {
   }
 
   private validate() {
+    if (this.config.buildOnlySteps) return
     if (this.isDev && this.launcher === null)
       throw new PipelineError('You must pass launcher instance in development mode')
     if (!this.isDev && this.builder === null)
@@ -45,9 +47,10 @@ export class Pipeline {
 
   private init() {
     this.steps.forEach(step => step.logger.setPipelineLogger(this.logger))
-    if (this.launcher !== null) this.launcher.logger.setPipelineLogger(this.logger)
     if (this.builder !== null) this.builder.logger.setPipelineLogger(this.logger)
     if (this.config.attachToProcess) onProcessExit(this.stop.bind(this))
+    if (this.launcher === null) return
+    this.launcher.logger.setPipelineLogger(this.logger)
     this.launcher.on('relaunch', () => this.logger.spinnerInfo('Relaunching electron... '))
     this.launcher.on('exit', async code => {
       this.logger.spinnerInfo('Killing all processes... (reason: launcher close event) ')
@@ -72,8 +75,9 @@ export class Pipeline {
 
     return Promise.all(promises)
       .then(async () => {
+        this.logger.spinnerSucceed('All steps completed.')
+        if (this.config.buildOnlySteps) return
         try {
-          this.logger.spinnerSucceed('All steps completed.')
           if (this.isDev) await this.buildDevelopment()
           else await this.buildProduction()
         } catch (e) {
