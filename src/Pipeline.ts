@@ -2,7 +2,7 @@ import { IStep } from './steps/IStep'
 import { onProcessExit } from './utils/onProcessExit'
 import { ILauncher } from './launcher/ILauncher'
 import { IPipelineLogger } from './logger/IPipelineLogger'
-import { PipelineLogger } from './logger/pipelineLogger'
+import { PipelineLogger } from './logger/PipelineLogger'
 import { IBuilder } from './builder/IBuilder'
 import { PipelineError } from './error/PipelineError'
 

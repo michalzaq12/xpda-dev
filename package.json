@@ -9,6 +9,7 @@
     "test:send_report": "nyc report --reporter=text-lcov | coveralls",
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
     "prettier": "prettier --write \"src/**/*.ts\""
   },
   "files": [
