@@ -37,6 +37,9 @@ test('electron-webpack-simple', async t => {
 
   await pipeline.build()
 
-  const output = fs.readFileSync(path.join(dir, 'index.js')).toString()
+  const output = fs
+    .readFileSync(path.join(dir, 'index.js'))
+    .toString()
+    .replace('\r', '')
   t.snapshot(output)
 })
