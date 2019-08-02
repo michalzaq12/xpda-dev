@@ -40,6 +40,6 @@ test('electron-webpack-simple', async t => {
   const output = fs
     .readFileSync(path.join(dir, 'index.js'))
     .toString()
-    .replace('\r', '')
+    .replace('\\r', '')
   t.snapshot(output)
 })
