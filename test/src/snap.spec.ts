@@ -18,6 +18,10 @@ test.afterEach.always(t => {
   t.context.tmpdir.removeCallback()
 })
 
+function normalizeOutput(out: string) {
+  return out.replace(/(\\r|\\n)/g, '')
+}
+
 test('electron-webpack-simple', async t => {
   const dir = t.context.tmpdir.name
 
@@ -37,9 +41,6 @@ test('electron-webpack-simple', async t => {
 
   await pipeline.build()
 
-  const output = fs
-    .readFileSync(path.join(dir, 'index.js'))
-    .toString()
-    .replace('\\r', '')
-  t.snapshot(output)
+  const output = fs.readFileSync(path.join(dir, 'index.js')).toString()
+  t.snapshot(normalizeOutput(output))
 })
