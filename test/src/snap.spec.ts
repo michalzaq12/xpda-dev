@@ -39,7 +39,7 @@ test('electron-webpack-simple', async t => {
     pipelineLogger: getPipelineLoggerStub(),
   })
 
-  await pipeline.build()
+  await pipeline.run()
 
   const output = fs.readFileSync(path.join(dir, 'index.js')).toString()
   t.snapshot(normalizeOutput(output))

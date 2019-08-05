@@ -64,7 +64,7 @@ export class Pipeline {
     await this.launcher.exit()
   }
 
-  async build() {
+  async run() {
     this.logger.spinnerStart('Starting ...')
 
     const promises = []

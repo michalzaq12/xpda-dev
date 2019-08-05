@@ -37,7 +37,7 @@ Step allows you to build or do everything you wish with your application to make
 
 ### Launcher
 
-Launcher allows you to run application when all steps completed (step may fail). _Launcher only works in development mode._
+Launcher allows you to run application when all steps completed (step may fail). _Launcher works only in development mode._
 
 **Launcher must implement [ILauncher]() interface**
 
@@ -50,24 +50,24 @@ Launcher allows you to run application when all steps completed (step may fail).
 - Electron cross platform app. Main process was written with help of Typescript
 
 ```javascript
-const {Pipeline, Webpack, ElectronLauncher} = require('xpda-dev');
+const { Pipeline, Webpack, ElectronLauncher } = require('xpda-dev')
 
 const launcher = new ElectronLauncher({
-  entryFile: './dist/index.js'
+  entryFile: './dist/index.js',
 })
 
 const webpackConfig = Webpack.getTypescriptConfig({
   tsconfig: './tsconfig.json',
-  entry: './index.ts'
+  entry: './index.ts',
   output: {
     filename: 'index.js',
     path: './dist',
-  }
+  },
 })
 
 const webpackStep = new Webpack({
   webpackConfig: webpackConfig,
-  launcher: launcher
+  launcher: launcher,
 })
 
 const pipe = new Pipeline({
@@ -75,8 +75,7 @@ const pipe = new Pipeline({
   isDevelopment: true,
   steps: [webpackStep],
   launcher: launcher,
-});
+})
 
-
-pipe.build();
+pipe.run()
 ```

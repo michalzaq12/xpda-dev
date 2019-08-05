@@ -18,7 +18,7 @@ test('development', async t => {
     pipelineLogger: getPipelineLoggerStub(),
   })
 
-  await pipeline.build()
+  await pipeline.run()
 
   //@ts-ignore
   t.true(step1.build.calledOnce)
@@ -49,7 +49,7 @@ test('development - stop', async t => {
     pipelineLogger: getPipelineLoggerStub(),
   })
 
-  await pipeline.build()
+  await pipeline.run()
   await pipeline.stop()
 
   //@ts-ignore
@@ -75,7 +75,7 @@ test('production', async t => {
     pipelineLogger: getPipelineLoggerStub(),
   })
 
-  await pipeline.build()
+  await pipeline.run()
 
   //@ts-ignore
   t.true(step1.build.calledOnce)
