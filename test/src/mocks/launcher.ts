@@ -1,10 +1,10 @@
-import { stubObject } from 'ts-sinon'
-import { ElectronLauncher, ILauncher } from '../../../src'
+import { stubInterface } from '@salesforce/ts-sinon'
+import { ILauncher } from '../../../src'
+import { SinonSandbox } from 'sinon'
+import { getLoggerStub } from './logger'
 
-export function getLauncherStub() {
-  return stubObject<ILauncher>(
-    new ElectronLauncher({
-      entryFile: 'dummy_string',
-    })
-  )
+export function getLauncherStub(sandbox: SinonSandbox) {
+  return stubInterface<ILauncher>(sandbox, {
+    logger: getLoggerStub(sandbox),
+  })
 }

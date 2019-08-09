@@ -1,13 +1,27 @@
-import test from 'ava'
+import anyTest, { TestInterface } from 'ava'
 import { Pipeline } from '../../src'
 import { getBuilderStub, getLauncherStub, getPipelineLoggerStub, getStepStub } from './mocks'
 import { PipelineError } from '../../src/error/PipelineError'
+import { SinonSandbox, createSandbox } from 'sinon'
+
+const test = anyTest as TestInterface<{ sandbox: SinonSandbox }>
+
+test.beforeEach(t => {
+  t.context = {
+    sandbox: createSandbox(),
+  }
+})
+
+test.afterEach.always(t => {
+  t.context.sandbox.restore()
+})
 
 test('development', async t => {
-  const step1 = getStepStub()
-  const step2 = getStepStub()
-  const launcher = getLauncherStub()
-  const builder = getBuilderStub()
+  const sandbox = t.context.sandbox
+  const step1 = getStepStub(sandbox)
+  const step2 = getStepStub(sandbox)
+  const launcher = getLauncherStub(sandbox)
+  const builder = getBuilderStub(sandbox)
 
   const pipeline = new Pipeline({
     isDevelopment: true,
@@ -15,30 +29,25 @@ test('development', async t => {
     steps: [step1, step2],
     launcher: launcher,
     builder: builder,
-    pipelineLogger: getPipelineLoggerStub(),
+    pipelineLogger: getPipelineLoggerStub(sandbox),
   })
 
   await pipeline.run()
 
-  //@ts-ignore
   t.true(step1.build.calledOnce)
-  //@ts-ignore
   t.true(step1.build.withArgs(true).calledOnce)
-  //@ts-ignore
   t.true(step2.build.calledOnce)
-  //@ts-ignore
   t.true(step2.build.withArgs(true).calledOnce)
-  //@ts-ignore
   t.true(launcher.launch.calledOnce)
-  //@ts-ignore
   t.true(builder.build.notCalled)
 })
 
 test('development - stop', async t => {
-  const step1 = getStepStub()
-  const step2 = getStepStub()
-  const launcher = getLauncherStub()
-  const builder = getBuilderStub()
+  const sandbox = t.context.sandbox
+  const step1 = getStepStub(sandbox)
+  const step2 = getStepStub(sandbox)
+  const launcher = getLauncherStub(sandbox)
+  const builder = getBuilderStub(sandbox)
 
   const pipeline = new Pipeline({
     isDevelopment: true,
@@ -46,25 +55,23 @@ test('development - stop', async t => {
     steps: [step1, step2],
     launcher: launcher,
     builder: builder,
-    pipelineLogger: getPipelineLoggerStub(),
+    pipelineLogger: getPipelineLoggerStub(sandbox),
   })
 
   await pipeline.run()
   await pipeline.stop()
 
-  //@ts-ignore
   t.true(step1.terminate.calledOnce)
-  //@ts-ignore
   t.true(step2.terminate.calledOnce)
-  //@ts-ignore
   t.true(launcher.exit.calledOnce)
 })
 
 test('production', async t => {
-  const step1 = getStepStub()
-  const step2 = getStepStub()
-  const launcher = getLauncherStub()
-  const builder = getBuilderStub()
+  const sandbox = t.context.sandbox
+  const step1 = getStepStub(sandbox)
+  const step2 = getStepStub(sandbox)
+  const launcher = getLauncherStub(sandbox)
+  const builder = getBuilderStub(sandbox)
 
   const pipeline = new Pipeline({
     isDevelopment: false,
@@ -72,22 +79,16 @@ test('production', async t => {
     steps: [step1, step2],
     launcher: launcher,
     builder: builder,
-    pipelineLogger: getPipelineLoggerStub(),
+    pipelineLogger: getPipelineLoggerStub(sandbox),
   })
 
   await pipeline.run()
 
-  //@ts-ignore
   t.true(step1.build.calledOnce)
-  //@ts-ignore
   t.true(step1.build.withArgs(false).calledOnce)
-  //@ts-ignore
   t.true(step2.build.calledOnce)
-  //@ts-ignore
   t.true(step2.build.withArgs(false).calledOnce)
-  //@ts-ignore
   t.true(builder.build.calledOnce)
-  //@ts-ignore
   t.true(launcher.launch.notCalled)
 })
 
@@ -96,7 +97,7 @@ test('invalid options - missing launcher in dev mode', async t => {
     new Pipeline({
       isDevelopment: true,
       attachToProcess: false,
-      pipelineLogger: getPipelineLoggerStub(),
+      pipelineLogger: getPipelineLoggerStub(t.context.sandbox),
     })
     t.fail()
   } catch (e) {
@@ -109,7 +110,7 @@ test('invalid options - missing builder in production mode', async t => {
     new Pipeline({
       isDevelopment: false,
       attachToProcess: false,
-      pipelineLogger: getPipelineLoggerStub(),
+      pipelineLogger: getPipelineLoggerStub(t.context.sandbox),
     })
     t.fail()
   } catch (e) {

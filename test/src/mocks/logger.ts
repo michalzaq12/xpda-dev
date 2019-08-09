@@ -1,6 +1,7 @@
-import { stubObject } from 'ts-sinon'
-import { ILogger, Logger } from '../../../src'
+import { stubInterface } from '@salesforce/ts-sinon'
+import { ILogger } from '../../../src'
+import { SinonSandbox, createSandbox } from 'sinon'
 
-export function getLoggerStub() {
-  return stubObject<ILogger>(new Logger('test', 'yellow'))
+export function getLoggerStub(sandbox?: SinonSandbox) {
+  return stubInterface<ILogger>(sandbox || createSandbox())
 }

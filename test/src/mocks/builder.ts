@@ -1,12 +1,15 @@
-import { stubObject } from 'ts-sinon'
-import { IBuilder, ElectronBuilder } from '../../../src'
+import { stubInterface } from '@salesforce/ts-sinon'
+import { IBuilder } from '../../../src'
+import { SinonSandbox } from 'sinon'
+import { getLoggerStub } from './logger'
 
-export function getBuilderStub() {
-  return stubObject<IBuilder>(new ElectronBuilder(), {
+export function getBuilderStub(sandbox: SinonSandbox) {
+  return stubInterface<IBuilder>(sandbox, {
     build: () => {
       return new Promise(resolve => {
         setTimeout(() => resolve(), 2000)
       })
     },
+    logger: getLoggerStub(sandbox),
   })
 }
