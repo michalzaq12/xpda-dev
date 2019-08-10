@@ -4,7 +4,7 @@ import { EventEmitter } from 'events'
 import { killWithAllSubProcess } from '../utils/killProcess'
 import { ILogger, Logger, ILauncher } from '..'
 
-export interface IElectronConfig {
+export interface IElectronOptions {
   entryFile: string
   logger?: ILogger
   inspectionPort?: number
@@ -18,23 +18,17 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
   readonly entryFile: string
   private process: ChildProcess = null
 
-  constructor(config: IElectronConfig) {
+  constructor(options: IElectronOptions) {
     super()
-    this.entryFile = config.entryFile
-    this.relaunchCode = config.relaunchCode || 250
-    this.inspectionPort = config.inspectionPort || 5858
-    this.logger = config.logger || new Logger('Electron', 'teal')
+    this.entryFile = options.entryFile
+    this.relaunchCode = options.relaunchCode || 250
+    this.inspectionPort = options.inspectionPort || 5858
+    this.logger = options.logger || new Logger('Electron', 'teal')
     this.logger.ignore(text => text.includes('source: chrome-devtools://devtools/bundled/shell.js (108)'))
   }
 
   public async launch() {
     let args = [`--inspect=${this.inspectionPort}`, this.entryFile, '--auto-detect=false', '--no-proxy-server']
-
-    // if (process.env.npm_execpath.endsWith('yarn.js')) {
-    //   args = args.concat(process.argv.slice(3))
-    // } else if (process.env.npm_execpath.endsWith('npm-cli.js')) {
-    //   args = args.concat(process.argv.slice(2))
-    // }
 
     this.process = spawn((electronPath as unknown) as string, args)
     this.pipe(this.logger)

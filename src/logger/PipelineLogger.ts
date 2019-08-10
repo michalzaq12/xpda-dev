@@ -9,7 +9,7 @@ const START = chalk.blue('[START] ')
 const INFO = chalk.blue('[INFO] ')
 const FAIL = chalk.redBright('[FAIL] ')
 
-export interface IPipelineLoggerConfig {
+export interface IPipelineLoggerOptions {
   title: string
   stream?: WritableStream
   disableSpinner?: boolean
@@ -21,15 +21,15 @@ export class PipelineLogger implements IPipelineLogger {
   private staticSpinner: Ora
   private lastActiveTitle: string
 
-  constructor(readonly config: IPipelineLoggerConfig) {
-    config.disableSpinner = config.disableSpinner || false
-    this.stream = config.stream || process.stdout
-    if (!this.config.disableSpinner) this.initSpinners()
+  constructor(readonly options: IPipelineLoggerOptions) {
+    options.disableSpinner = options.disableSpinner || false
+    this.stream = options.stream || process.stdout
+    if (!this.options.disableSpinner) this.initSpinners()
   }
 
   private initSpinners() {
     this.spinner = ora({
-      text: this.config.title,
+      text: this.options.title,
       stream: this.stream,
       color: 'white',
     })
@@ -49,7 +49,7 @@ export class PipelineLogger implements IPipelineLogger {
 
   private formatSpinnerTitle() {
     this.stream.write('\n')
-    return chalk.underline.bold(this.config.title) + ': '
+    return chalk.underline.bold(this.options.title) + ': '
   }
 
   private printTitle(title: string, color: string) {
@@ -64,7 +64,7 @@ export class PipelineLogger implements IPipelineLogger {
   spinnerFail(error: Error | string) {
     const message = typeof error === 'string' ? error : error.message || 'Error'
     const formattedText = this.formatSpinnerTitle() + chalk.redBright(message)
-    if (this.config.disableSpinner) this.writeToStream(FAIL + formattedText)
+    if (this.options.disableSpinner) this.writeToStream(FAIL + formattedText)
     else this.spinner.fail(formattedText)
     if (typeof error !== 'string') console.log(error)
   }
@@ -72,19 +72,19 @@ export class PipelineLogger implements IPipelineLogger {
   spinnerInfo(text: string) {
     this.lastActiveTitle = ''
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream(INFO + formattedText)
+    if (this.options.disableSpinner) return this.writeToStream(INFO + formattedText)
     this.staticSpinner.info(formattedText)
   }
 
   spinnerStart(text: string) {
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream(START + formattedText)
+    if (this.options.disableSpinner) return this.writeToStream(START + formattedText)
     this.spinner.start(formattedText)
   }
 
   spinnerSucceed(text: string) {
     const formattedText = this.formatSpinnerTitle() + text
-    if (this.config.disableSpinner) return this.writeToStream(SUCCEED + formattedText)
+    if (this.options.disableSpinner) return this.writeToStream(SUCCEED + formattedText)
     this.spinner.succeed(formattedText)
   }
 

@@ -5,6 +5,12 @@ import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
 import { ILogger, Logger, IStep, ILauncher, PipelineError } from '../..'
 
+export interface IWebpackOptions {
+  webpackConfig: Configuration
+  logger?: ILogger
+  launcher?: ILauncher
+}
+
 export class Webpack implements IStep {
   readonly logger: ILogger
   readonly webpackConfig: Configuration
@@ -12,10 +18,10 @@ export class Webpack implements IStep {
   private watching: Watching = null
   private readonly launcher: ILauncher = null
 
-  constructor(config: { webpackConfig: Configuration; logger?: ILogger; launcher?: ILauncher }) {
-    this.logger = config.logger || new Logger('Webpack', 'olive')
-    this.webpackConfig = config.webpackConfig
-    this.launcher = config.launcher
+  constructor(options: IWebpackOptions) {
+    this.logger = options.logger || new Logger('Webpack', 'olive')
+    this.webpackConfig = options.webpackConfig
+    this.launcher = options.launcher
   }
 
   async build(isDev: boolean) {
