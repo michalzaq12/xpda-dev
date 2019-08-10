@@ -2,9 +2,7 @@ import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { killWithAllSubProcess } from '../utils/killProcess'
-import { ILogger } from '../logger/ILogger'
-import { ILauncher } from './ILauncher'
-import { Logger } from '..'
+import { ILogger, Logger, ILauncher } from '..'
 
 export interface IElectronConfig {
   entryFile: string

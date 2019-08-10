@@ -1,9 +1,6 @@
 import { log } from 'builder-util/out/log'
 import { build, CliOptions } from 'electron-builder'
-import { IBuilder } from './IBuilder'
-import { ILogger } from '../logger/ILogger'
-import { PipelineError } from '../error/PipelineError'
-import { Logger } from '../logger/Logger'
+import { ILogger, Logger, IBuilder, PipelineError } from '..'
 
 export class ElectronBuilder implements IBuilder {
   readonly logger: ILogger

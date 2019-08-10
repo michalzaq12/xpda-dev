@@ -1,11 +1,15 @@
-export * from './Pipeline'
-export * from './steps/IStep'
-export * from './logger/ILogger'
+// Export interfaces
 export * from './logger/IPipelineLogger'
-export * from './logger/Logger'
-export * from './builder/ElectronBuilder'
+export * from './logger/ILogger'
+export * from './steps/IStep'
 export * from './builder/IBuilder'
 export * from './launcher/ILauncher'
-export * from './launcher/ElectronLauncher'
-export * from './steps/webpack/Webpack'
+
+// Export defaults (files that don't require extra dependencies)
+export * from './Pipeline'
+export * from './logger/Logger'
 export * from './steps/Timer'
+export * from './logger/PipelineLogger'
+
+// Export errors
+export * from './error/PipelineError'

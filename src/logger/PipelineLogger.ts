@@ -1,8 +1,8 @@
-import { IPipelineLogger } from './IPipelineLogger'
+type WritableStream = NodeJS.WritableStream
 import * as readline from 'readline'
 import ora, { Ora } from 'ora'
 import chalk from 'chalk'
-type WritableStream = NodeJS.WritableStream
+import { IPipelineLogger } from '..'
 
 const SUCCEED = chalk.green('[SUCCEED] ')
 const START = chalk.blue('[START] ')

@@ -1,7 +1,6 @@
-import { IStep } from './IStep'
-import { ILogger } from '../logger/ILogger'
-import { setTimeout, clearTimeout } from 'timers'
 import Timeout = NodeJS.Timeout
+import { setTimeout, clearTimeout } from 'timers'
+import { ILogger, IStep } from '..'
 
 export class Timer implements IStep {
   private handler: Timeout

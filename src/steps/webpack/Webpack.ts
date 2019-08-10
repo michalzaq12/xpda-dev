@@ -1,13 +1,9 @@
-import { IStep } from '../IStep'
-import { ILogger } from '../../logger/ILogger'
-import { ILauncher } from '../../launcher/ILauncher'
-import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import * as webpack from 'webpack'
+import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
-import { PipelineError } from '../../error/PipelineError'
-import { Logger } from '../../logger/Logger'
+import { ILogger, Logger, IStep, ILauncher, PipelineError } from '../..'
 
 export class Webpack implements IStep {
   readonly logger: ILogger
