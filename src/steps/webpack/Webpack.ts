@@ -7,7 +7,7 @@ import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
 import { PipelineError } from '../../error/PipelineError'
-import { Logger } from '../..'
+import { Logger } from '../../logger/Logger'
 
 export class Webpack implements IStep {
   readonly logger: ILogger
