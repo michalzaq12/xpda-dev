@@ -3,7 +3,10 @@ language: node_js
 node_js:
   - '10'
 
-install: npm install
+install:
+  - npm install
+  - npm i --save-dev ts-loader #for typescript snapshot test
+  - npm i --save-dev typescript #for typescript snapshot test
 script: npm run test:coverage
 after_success: npm run test:send_report
 

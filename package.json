@@ -26,12 +26,6 @@
     "url": "https://github.com/michalzaq12/xpda-dev/issues"
   },
   "homepage": "https://github.com/michalzaq12/xpda-dev#readme",
-  "optionalDependencies": {
-    "electron": "^5.0.0",
-    "electron-builder": "^21.1.5",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.3"
-  },
   "dependencies": {
     "@types/tmp": "^0.1.0",
     "chalk": "^2.4.2",
@@ -55,6 +49,7 @@
     "lint-staged": "^8.1.0",
     "nyc": "^14.1.1",
     "prettier": "1.15.3",
+    "sinon": "^7.4.1",
     "tmp": "^0.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
