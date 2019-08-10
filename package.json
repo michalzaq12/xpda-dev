@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/michalzaq12/xpda-dev#readme",
   "dependencies": {
-    "@types/tmp": "^0.1.0",
     "chalk": "^2.4.2",
     "del": "^5.0.0",
     "ora": "^3.2.0",
@@ -41,6 +40,7 @@
     "@types/node": "^12.6.4",
     "@types/ps-tree": "^1.1.0",
     "@types/sinon": "^7.0.5",
+    "@types/tmp": "^0.1.0",
     "@types/webpack": "^4.32.1",
     "ava": "^2.2.0",
     "coveralls": "^3.0.5",
@@ -64,19 +64,6 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "files": [
-      "test/src/**/*.spec.ts"
-    ],
-    "snapshotDir": "test/snapshots"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
