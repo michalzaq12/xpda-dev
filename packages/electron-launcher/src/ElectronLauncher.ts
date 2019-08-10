@@ -1,10 +1,10 @@
-import * as electronPath from 'electron'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import { killWithAllSubProcess } from '../utils/killProcess'
-import { ILogger, Logger, ILauncher } from '..'
+import { killWithAllSubProcess } from '@xpda-dev/core/src/utils'
+import { ILogger, Logger, ILauncher } from '@xpda-dev/core'
 
 export interface IElectronOptions {
+  electronPath: string
   entryFile: string
   logger?: ILogger
   inspectionPort?: number
@@ -15,11 +15,13 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
   readonly logger: ILogger
   readonly relaunchCode: number
   readonly inspectionPort: number
+  readonly electronPath: string
   readonly entryFile: string
   private process: ChildProcess = null
 
   constructor(options: IElectronOptions) {
     super()
+    this.electronPath = options.electronPath
     this.entryFile = options.entryFile
     this.relaunchCode = options.relaunchCode || 250
     this.inspectionPort = options.inspectionPort || 5858
@@ -30,7 +32,7 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
   public async launch() {
     let args = [`--inspect=${this.inspectionPort}`, this.entryFile, '--auto-detect=false', '--no-proxy-server']
 
-    this.process = spawn((electronPath as unknown) as string, args)
+    this.process = spawn(this.electronPath, args)
     this.pipe(this.logger)
 
     this.process.on('exit', code => {

@@ -1,8 +1,7 @@
 import anyTest, { TestInterface } from 'ava'
-import { Pipeline } from '../../src/Pipeline'
-import { getBuilderStub, getLauncherStub, getPipelineLoggerStub, getStepStub } from './mocks'
-import { PipelineError } from '../../src/error/PipelineError'
 import { SinonSandbox, createSandbox } from 'sinon'
+import { Pipeline, PipelineError } from '@this/core'
+import { getBuilderStub, getLauncherStub, getPipelineLoggerStub, getStepStub } from './mocks'
 
 const test = anyTest as TestInterface<{ sandbox: SinonSandbox }>
 

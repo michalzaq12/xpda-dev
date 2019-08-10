@@ -1,0 +1,37 @@
+{
+  "name": "@xpda-dev/core",
+  "version": "0.1.0",
+  "description": "Cross platform desktop app development tools",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalzaq12/xpda-dev.git"
+  },
+  "keywords": [],
+  "author": "“Michał <“michal.m.zarach@gmail.com”>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michalzaq12/xpda-dev/issues"
+  },
+  "homepage": "https://github.com/michalzaq12/xpda-dev#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "ora": "^3.2.0",
+    "ps-tree": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.4",
+    "@types/ps-tree": "^1.1.0",
+    "execa": "^2.0.3"
+  }
+}

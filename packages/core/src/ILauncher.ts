@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { ILogAble } from '../logger/ILogAble'
+import { ILogAble } from '.'
 
 export interface ILauncher extends EventEmitter, ILogAble {
   readonly isRunning: boolean

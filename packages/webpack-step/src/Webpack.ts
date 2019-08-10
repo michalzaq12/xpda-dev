@@ -3,7 +3,7 @@ import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpac
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
 import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
-import { ILogger, Logger, IStep, ILauncher, PipelineError } from '../..'
+import { ILogger, Logger, IStep, ILauncher, PipelineError } from '@xpda-dev/core'
 
 export interface IWebpackOptions {
   webpackConfig: Configuration

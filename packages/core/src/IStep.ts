@@ -1,4 +1,4 @@
-import { ILogAble } from '../logger/ILogAble'
+import { ILogAble } from '.'
 
 export interface IStep extends ILogAble {
   build(isDev: boolean): Promise<any>

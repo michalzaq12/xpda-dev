@@ -1,4 +1,4 @@
-import { onProcessExit } from './utils/onProcessExit'
+import { onProcessExit } from './utils'
 import { IBuilder, ILauncher, IStep, IPipelineLogger, PipelineLogger, PipelineError } from '.'
 
 export interface IConfig {

@@ -1,6 +1,6 @@
 import { log } from 'builder-util/out/log'
 import { build, CliOptions } from 'electron-builder'
-import { ILogger, Logger, IBuilder, PipelineError } from '..'
+import { ILogger, Logger, IBuilder, PipelineError } from '@xpda-dev/core'
 
 export interface IElectronBuilderOptions {
   builderOptions?: CliOptions

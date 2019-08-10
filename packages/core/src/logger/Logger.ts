@@ -1,7 +1,7 @@
 type WritableStream = NodeJS.WritableStream
 import { Writable } from 'stream'
 import { Console } from 'console'
-import { ILogger, IPipelineLogger } from '..'
+import { ILogger, IPipelineLogger } from '../index'
 
 export class Logger implements ILogger {
   public stdout: WritableStream

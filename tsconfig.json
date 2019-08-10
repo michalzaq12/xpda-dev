@@ -14,13 +14,14 @@
     "lib": [
       "es6"
     ],
-    "outDir": "./lib"
+    "baseUrl": ".",
+    "paths": {
+      "@this/core": ["packages/core/lib"],
+      "@this/webpack-step": ["packages/webpack-step/lib"]
+    }
   },
   "exclude": [
     "node_modules",
     "**/*.spec.ts"
-  ],
-  "include": [
-    "src/**/*"
   ]
 }

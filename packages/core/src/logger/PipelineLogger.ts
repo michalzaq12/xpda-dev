@@ -2,7 +2,7 @@ type WritableStream = NodeJS.WritableStream
 import * as readline from 'readline'
 import ora, { Ora } from 'ora'
 import chalk from 'chalk'
-import { IPipelineLogger } from '..'
+import { IPipelineLogger } from '../index'
 
 const SUCCEED = chalk.green('[SUCCEED] ')
 const START = chalk.blue('[START] ')
@@ -44,6 +44,7 @@ export class PipelineLogger implements IPipelineLogger {
   private clearSpinner() {
     if (!this.spinner || !this.spinner.isSpinning) return
     readline.clearLine(this.stream, 0)
+    // @ts-ignore
     readline.cursorTo(this.stream, 0)
   }
 

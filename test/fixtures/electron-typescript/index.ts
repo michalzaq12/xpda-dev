@@ -1,3 +1,4 @@
+// @ts-ignore
 import { app, BrowserWindow } from 'electron'
 
 function createWindow(): void {
