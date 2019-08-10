@@ -1,5 +1,5 @@
 import anyTest, { TestInterface } from 'ava'
-import { Pipeline } from '../../src'
+import { Pipeline } from '../../src/Pipeline'
 import { getBuilderStub, getLauncherStub, getPipelineLoggerStub, getStepStub } from './mocks'
 import { PipelineError } from '../../src/error/PipelineError'
 import { SinonSandbox, createSandbox } from 'sinon'

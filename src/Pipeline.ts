@@ -52,7 +52,7 @@ export class Pipeline {
     if (this.launcher === null) return
     this.launcher.logger.setPipelineLogger(this.logger)
     this.launcher.on('relaunch', () => this.logger.spinnerInfo('Relaunching electron... '))
-    this.launcher.on('exit', async code => {
+    this.launcher.on('exit', async () => {
       this.logger.spinnerInfo('Killing all processes... (reason: launcher close event) ')
       this.stop()
     })

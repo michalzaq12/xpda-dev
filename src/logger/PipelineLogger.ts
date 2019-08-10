@@ -93,7 +93,7 @@ export class PipelineLogger implements IPipelineLogger {
     this.stream.write('\n')
   }
 
-  log(title: string, color: string, text: string, textColor?: string) {
+  log(title: string, color: string, text: string) {
     if (text.trim() === '' || text.trim() === ' ') return
     this.clearSpinner()
     this.printTitle(title, color)
