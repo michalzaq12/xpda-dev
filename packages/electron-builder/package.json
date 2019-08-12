@@ -48,12 +48,5 @@
       "test/**/*.spec.ts"
     ],
     "snapshotDir": "test/snapshots"
-  },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "include": [
-      "src/**/*.ts"
-    ],
-    "all": true
   }
 }

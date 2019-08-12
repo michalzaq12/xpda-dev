@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "lerna run test",
-    "test:coverage": "rimraf ./.nyc_output && lerna run test:coverage -- -- --no-clean --temp-dir=../../.nyc_output",
+    "test:coverage": "rimraf ./.nyc_output && cross-env LERNA=true lerna run test:coverage",
+    "test:report": "nyc report --reporter=text",
     "test:send_report": "nyc report --reporter=text-lcov | coveralls",
     "build": "lerna build",
     "build:watch": "lerna run --parallel build:watch",
@@ -35,6 +36,7 @@
     "@types/webpack": "^4.32.1",
     "ava": "^2.2.0",
     "coveralls": "^3.0.5",
+    "cross-env": "^5.2.0",
     "husky": "^1.3.1",
     "lerna": "^3.16.4",
     "lint-staged": "^8.1.0",
@@ -56,5 +58,12 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "include": [
+      "packages/**/*.ts"
+    ],
+    "all": true
   }
 }
