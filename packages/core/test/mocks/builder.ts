@@ -1,5 +1,5 @@
 import { stubInterface } from '@salesforce/ts-sinon'
-import { IBuilder } from '@this/core'
+import { IBuilder } from '../../src'
 import { SinonSandbox } from 'sinon'
 import { getLoggerStub } from './logger'
 

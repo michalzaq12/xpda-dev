@@ -13,12 +13,7 @@
     "target": "es6",
     "lib": [
       "es6"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@this/core": ["packages/core/lib"],
-      "@this/webpack-step": ["packages/webpack-step/lib"]
-    }
+    ]
   },
   "exclude": [
     "node_modules",
