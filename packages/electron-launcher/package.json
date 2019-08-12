@@ -26,5 +26,25 @@
   },
   "devDependencies": {
     "@xpda-dev/core": "^0.1.0"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "files": [
+      "test/**/*.spec.ts"
+    ],
+    "snapshotDir": "test/snapshots"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "include": [
+      "src/**/*.ts"
+    ],
+    "all": true
   }
 }

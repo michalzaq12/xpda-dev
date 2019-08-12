@@ -4,8 +4,8 @@
   "description": "Cross platform desktop app development tools",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ava",
-    "test:coverage": "nyc ava",
+    "test": "lerna run test",
+    "test:coverage": "rimraf ./.nyc_output && lerna run test:coverage -- -- --no-clean --temp-dir=../../.nyc_output",
     "test:send_report": "nyc report --reporter=text-lcov | coveralls",
     "build": "lerna build",
     "build:watch": "lerna run --parallel build:watch",
@@ -40,6 +40,7 @@
     "lint-staged": "^8.1.0",
     "nyc": "^14.1.1",
     "prettier": "1.15.3",
+    "rimraf": "^2.6.3",
     "sinon": "^7.4.1",
     "tmp": "^0.1.0",
     "ts-node": "^8.3.0",
@@ -55,25 +56,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "files": [
-      "test/src/**/*.spec.ts"
-    ],
-    "snapshotDir": "test/snapshots"
-  },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "include": [
-      "packages/**/*.ts"
-    ],
-    "all": true
   }
 }

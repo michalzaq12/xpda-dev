@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "test": "ava",
+    "test:coverage": "nyc ava"
   },
   "files": [
     "lib"
@@ -36,5 +38,25 @@
     "@xpda-dev/core": "^0.1.0",
     "webpack": "^4.39.1",
     "ts-loader": "^6.0.4"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "files": [
+      "test/src/**/*.spec.ts"
+    ],
+    "snapshotDir": "test/snapshots"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "include": [
+      "src/**/*.ts"
+    ],
+    "all": true
   }
 }

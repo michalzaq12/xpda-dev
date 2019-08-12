@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "test": "ava",
+    "test:coverage": "nyc ava"
   },
   "files": [
     "lib"
@@ -33,5 +35,25 @@
     "@types/node": "^12.6.4",
     "@types/ps-tree": "^1.1.0",
     "execa": "^2.0.3"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "files": [
+      "test/**/*.spec.ts"
+    ],
+    "snapshotDir": "test/snapshots"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "include": [
+      "src/**/*.ts"
+    ],
+    "all": true
   }
 }

@@ -2,9 +2,9 @@ import anyTest, { TestInterface } from 'ava'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as tmp from 'tmp'
-import { Pipeline } from '@this/core'
-import { Webpack } from '@this/webpack-step'
-import { getLoggerStub, getPipelineLoggerStub } from './mocks'
+import { Pipeline } from '@xpda-dev/core'
+import { Webpack } from '../../src'
+import { getLoggerStub, getPipelineLoggerStub } from '@xpda-dev/core/test/mocks'
 import { DirResult } from 'tmp'
 
 const test = anyTest as TestInterface<{ tmpdir: DirResult }>
