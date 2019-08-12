@@ -5,17 +5,23 @@ node_js:
 
 install:
   - npm install
-  - npm i --save-dev ts-loader #for typescript snapshot test
-  - npm i --save-dev typescript #for typescript snapshot test
+  - lerna bootstrap
+
 script: npm run test:coverage
+
 after_success: npm run test:send_report
 
+
+
+before_deploy:
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+  - lerna run build
+
 deploy:
-  provider: npm
+  provider: script
+  script: lerna publish
   email: michal.m.zarach@gmail.com
   skip_cleanup: true
-  api_key:
-    secure: KkR2wgRQA2ZtgzIRx8hiGmsZVPx7GtHeVw/xX1bAfvzP9oW1/vB/K32QMxPl8taLd5OiIDrof5bjxE1M+bvblyVAmYZqeRoUe+ybiO0uB7Sc6nVYI3F03kZ8/jotdMJq7fSPEchiurDhRGGfKuJaJdNPVguruCfaQQf9aox0/V3HXd1d8T4wz2pWO+bNLMFKb+C4WqK0lWKMI5aDz2ZoC5vGEnKgkRYeRaZmGqpD5BO2RZt/rzy3u7IgFFRjD1x5LYEoJfn+vVeyD3pzv7iRzxGVrtG5f/eTNUEV0MP6Vf7aJSrMnGo94xwlxoCipPQAKQqHv+rcGT8i5VZ3iyzoLVDrsMl08ppbGCN0uo+qCQxM/SoPB2h0wLQ2AJ5b+1qSbbBh+MKmvEQWUdhU4x/AFyNoiXE73ZioWob/T1UQAV8rb+GxXaedYNnxzPpE8K8eV+SzQd8K7rHKoMpeVgXeOHO563BN5UgebKqBSHeq2GAPjnQbjnQbSxJCHsnwW8GagHxipgzUjZEBvM2KgJ4JIbv5CnTEFmSLXVoWtZVVT7yhangeo5lI1R/sXTYQKn2RubPwo0pBCPr1QpdxWYssT0RXr31PCxwOz/XXrGyHGRJIZD/auRNDFTPj4OCHuhFGQKcm9sqE2z4SkmqcBNPepzGccFYl+YjxXi3v18Jh9Pc=
   on:
     tags: true
     repo: michalzaq12/xpda-dev
