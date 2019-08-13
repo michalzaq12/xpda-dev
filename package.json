@@ -8,7 +8,7 @@
     "test:coverage": "rimraf ./.nyc_output && cross-env LERNA=true lerna run test:coverage",
     "test:report": "nyc report --reporter=text",
     "test:send_report": "nyc report --reporter=text-lcov | coveralls",
-    "build": "lerna run --parallel build",
+    "build": "lerna run build",
     "build:watch": "lerna run --parallel build:watch",
     "prettier": "prettier --write \"packages/**/*.ts\""
   },
