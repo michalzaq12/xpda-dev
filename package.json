@@ -8,14 +8,10 @@
     "test:coverage": "rimraf ./.nyc_output && cross-env LERNA=true lerna run test:coverage",
     "test:report": "nyc report --reporter=text",
     "test:send_report": "nyc report --reporter=text-lcov | coveralls",
-    "build": "lerna build",
+    "build": "lerna --parallel build",
     "build:watch": "lerna run --parallel build:watch",
-    "prepublishOnly": "npm run build",
     "prettier": "prettier --write \"packages/**/*.ts\""
   },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/michalzaq12/xpda-dev.git"
