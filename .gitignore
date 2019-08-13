@@ -67,3 +67,5 @@ lib
 
 
 test/out
+
+packages/**/package-lock.json
