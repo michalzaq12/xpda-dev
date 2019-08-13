@@ -21,10 +21,9 @@ before_deploy:
 
 deploy:
   provider: script
-  script: lerna publish
+  script: lerna publish from-package
   email: michal.m.zarach@gmail.com
   skip_cleanup: true
   on:
-    tags: true
     repo: michalzaq12/xpda-dev
     branch: master
