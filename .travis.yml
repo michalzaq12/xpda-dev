@@ -13,11 +13,8 @@ script:
 
 after_success: npm run test:send_report
 
-
-
-before_deploy:
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
-  - lerna run build
+# set NPM auth token
+before_deploy: echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 
 deploy:
   provider: script

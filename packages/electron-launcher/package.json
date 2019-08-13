@@ -39,5 +39,6 @@
       "test/**/*.spec.ts"
     ],
     "snapshotDir": "test/snapshots"
-  }
+  },
+  "gitHead": "2263a6fcee9964d650475574bca27f4fcfc45f71"
 }
