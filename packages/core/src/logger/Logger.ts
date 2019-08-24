@@ -22,7 +22,7 @@ export class Logger implements ILogger {
       write(chunk, encoding, callback) {
         self.buffer.push(chunk)
         if (chunk.toString().includes('\n')) {
-          self.info(Buffer.concat(self.buffer).toString(encoding))
+          self.info(Buffer.concat(self.buffer).toString(encoding === 'buffer' ? undefined : encoding))
           self.buffer = []
         }
         callback()
