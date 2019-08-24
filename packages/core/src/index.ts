@@ -11,3 +11,6 @@ export * from './logger/Logger'
 export * from './logger/PipelineLogger'
 export * from './Pipeline'
 export * from './PipelineError'
+
+import * as utils from './utils'
+export { utils }

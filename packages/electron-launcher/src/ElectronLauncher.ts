@@ -1,7 +1,7 @@
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import { killWithAllSubProcess } from '@xpda-dev/core/src/utils'
-import { ILogger, Logger, ILauncher } from '@xpda-dev/core'
+import { ILogger, Logger, ILauncher, utils } from '@xpda-dev/core'
+const { killWithAllSubProcess } = utils
 
 export interface IElectronOptions {
   electronPath: string
