@@ -88,7 +88,7 @@ export class PipelineLogger implements IPipelineLogger {
 
   log(title: string, color: string, text: string) {
     if (text.trim() === '' || text.trim() === ' ') return
-    if (this.spinner) this.spinner.clear()
+    if (this.spinner && this.spinner.isSpinning) this.spinner.clear()
     this.printTitle(title, color)
     text = text
       .split(/\r?\n/)
@@ -96,6 +96,6 @@ export class PipelineLogger implements IPipelineLogger {
       .join('\n')
     this.writeToStream(text)
     this.lastActiveTitle = title
-    if (this.spinner) this.spinner.render()
+    if (this.spinner && this.spinner.isSpinning) this.spinner.render()
   }
 }
