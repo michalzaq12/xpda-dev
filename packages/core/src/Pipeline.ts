@@ -74,7 +74,10 @@ export class Pipeline {
         if (this.config.buildOnlySteps) return
         try {
           if (this.isDev) await this.buildDevelopment()
-          else await this.buildProduction()
+          else {
+            await this.buildProduction()
+            process.exit(0)
+          }
         } catch (e) {
           this.logger.spinnerFail(e)
           process.exit(1)

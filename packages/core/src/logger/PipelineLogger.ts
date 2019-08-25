@@ -1,5 +1,4 @@
 type WritableStream = NodeJS.WritableStream
-import * as readline from 'readline'
 import ora, { Ora } from 'ora'
 import chalk from 'chalk'
 import { IPipelineLogger } from '../index'
@@ -7,7 +6,7 @@ import { IPipelineLogger } from '../index'
 const SUCCEED = chalk.green('[SUCCEED] ')
 const START = chalk.blue('[START] ')
 const INFO = chalk.blue('[INFO] ')
-const FAIL = chalk.redBright('[FAIL] ')
+const FAIL = chalk.red('[FAIL] ')
 
 export interface IPipelineLoggerOptions {
   title: string
@@ -39,13 +38,6 @@ export class PipelineLogger implements IPipelineLogger {
       stream: this.stream,
       color: 'white',
     })
-  }
-
-  private clearSpinner() {
-    if (!this.spinner || !this.spinner.isSpinning) return
-    readline.clearLine(this.stream, 0)
-    // @ts-ignore
-    readline.cursorTo(this.stream, 0)
   }
 
   private formatSpinnerTitle() {
@@ -96,7 +88,7 @@ export class PipelineLogger implements IPipelineLogger {
 
   log(title: string, color: string, text: string) {
     if (text.trim() === '' || text.trim() === ' ') return
-    this.clearSpinner()
+    if (this.spinner) this.spinner.clear()
     this.printTitle(title, color)
     text = text
       .split(/\r?\n/)
@@ -104,5 +96,6 @@ export class PipelineLogger implements IPipelineLogger {
       .join('\n')
     this.writeToStream(text)
     this.lastActiveTitle = title
+    if (this.spinner) this.spinner.render()
   }
 }
