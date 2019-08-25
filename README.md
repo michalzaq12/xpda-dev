@@ -20,7 +20,7 @@
 Install with npm:
 
 ```bash
-npm install --save-dev xpda-dev
+npm install --save-dev @xpda-dev/core
 ```
 
 <h2 align="center">Concepts</h2>
@@ -29,31 +29,39 @@ npm install --save-dev xpda-dev
 
 Step allows you to build or do everything you wish with your application to make it ready to use.
 
-**Each step must implement [IStep](https://github.com/michalzaq12/xpda-dev/blob/963cfa88529d22761119e8396f4734fcd6e6b0b5/src/steps/IStep.ts) interface**
+**Each step must implement [IStep](https://github.com/michalzaq12/xpda-dev/blob/master/packages/core/src/IStep.ts) interface**
 
-| Name    | Description                                                            | Constructor options                                                                                                                       | Requirements |
-| ------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Webpack | Transpile your code with [webpack](https://github.com/webpack/webpack) | [IWebpackOptions](https://github.com/michalzaq12/xpda-dev/blob/963cfa88529d22761119e8396f4734fcd6e6b0b5/src/steps/webpack/Webpack.ts#L19) | -            |
+| Name    | Description                                                            | Constructor options                                                                                            | Requirements                                                                   |
+| ------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Webpack | Transpile your code with [webpack](https://github.com/webpack/webpack) | [IWebpackOptions](https://github.com/michalzaq12/xpda-dev/blob/master/packages/webpack-step/src/Webpack.ts#L8) | [@xpda-dev/webpack-step](https://www.npmjs.com/package/@xpda-dev/webpack-step) |
 
 ### Launcher
 
 Launcher allows you to run application when all steps completed (step may fail). _Launcher works only in development mode._
 
-**Launcher must implement [ILauncher]() interface**
+**Launcher must implement [ILauncher](https://github.com/michalzaq12/xpda-dev/blob/master/packages/core/src/ILauncher.ts) interface**
 
-| Name             | Description                                             | Options                                                                                                                                   | Requirements           |
-| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| ElectronLauncher | Launch [electron](https://github.com/electron/electron) | [IWebpackOptions](https://github.com/michalzaq12/xpda-dev/blob/963cfa88529d22761119e8396f4734fcd6e6b0b5/src/steps/webpack/Webpack.ts#L19) | `"electron": "^5.0.0"` |
+| Name             | Description                                             | Options                                                                                                                       | Requirements                                                                             |
+| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| ElectronLauncher | Launch [electron](https://github.com/electron/electron) | [IElectronOptions](https://github.com/michalzaq12/xpda-dev/blob/master/packages/electron-launcher/src/ElectronLauncher.ts#L6) | [@xpda-dev/electron-launcher](https://www.npmjs.com/package/@xpda-dev/electron-launcher) |
+
+### Launcher
+
+// TODO
 
 <h2 align="center">Examples</h2>
 
 - Electron cross platform app. Main process was written with help of Typescript
 
 ```javascript
-const { Pipeline, Webpack, ElectronLauncher } = require('xpda-dev')
+const electron = require('electron')
+const { Pipeline } = require('@xpda-dev/core')
+const { Webpack } = require('@xpda-dev/webpack-step')
+const { ElectronLauncher } = require('@xpda-dev/electron-launcher')
 
 const launcher = new ElectronLauncher({
   entryFile: './dist/index.js',
+  electronPath: electron,
 })
 
 const webpackConfig = Webpack.getTypescriptConfig({
