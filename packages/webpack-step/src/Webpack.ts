@@ -26,6 +26,10 @@ export class Webpack implements IStep {
 
   async build(isDev: boolean) {
     this.webpackConfig.mode = isDev ? 'development' : 'production'
+    this.webpackConfig.node = {
+      __filename: isDev,
+      __dirname: isDev,
+    } // => resolve paths before compilation in dev and run-time on production
     this.compiler = webpack(this.webpackConfig)
     return isDev ? this.watch() : this.run()
   }

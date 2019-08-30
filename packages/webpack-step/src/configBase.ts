@@ -47,10 +47,6 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
       libraryTarget: config.output.libraryTarget || 'commonjs2',
       path: config.output.path,
     },
-    node: {
-      __filename: false,
-      __dirname: false,
-    },
     plugins: config.plugins || [],
     resolve: {
       extensions: ['.js', '.json', '.node'].concat(config.extensions || []),
