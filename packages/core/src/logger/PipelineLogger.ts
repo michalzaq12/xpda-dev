@@ -86,13 +86,18 @@ export class PipelineLogger implements IPipelineLogger {
     this.stream.write('\n')
   }
 
-  log(title: string, color: string, text: string) {
+  private static colorText(text: string, color?: string) {
+    if (color) return chalk.keyword(color)(text)
+    return text
+  }
+
+  log(title: string, titleColor: string, text: string, textColor?: string) {
     if (text.trim() === '' || text.trim() === ' ') return
     if (this.spinner && this.spinner.isSpinning) this.spinner.clear()
-    this.printTitle(title, color)
+    this.printTitle(title, titleColor)
     text = text
       .split(/\r?\n/)
-      .map(el => chalk.keyword(color)('│  ') + el)
+      .map(el => PipelineLogger.colorText('│  ', titleColor) + PipelineLogger.colorText(el, textColor))
       .join('\n')
     this.writeToStream(text)
     this.lastActiveTitle = title

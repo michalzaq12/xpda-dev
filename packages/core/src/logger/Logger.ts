@@ -5,29 +5,42 @@ import { ILogger, IPipelineLogger } from '../index'
 
 export class Logger implements ILogger {
   public stdout: WritableStream
+  public stderr: WritableStream
   private ignoreFunction: Function
   private pipelineLogger: IPipelineLogger
   private errorLogger: Console
 
-  private buffer: Array<Buffer> = []
+  private stdoutBuffer: Array<Buffer> = []
+  private stderrBuffer: Array<Buffer> = []
 
   constructor(readonly name: string, readonly color: string) {
     this.initStream()
-    this.errorLogger = new Console(this.stdout)
+    this.errorLogger = new Console(this.stderr)
   }
 
   private initStream() {
     const self = this
     this.stdout = new Writable({
       write(chunk, encoding, callback) {
-        self.buffer.push(chunk)
-        if (chunk.toString().includes('\n')) {
-          self.info(Buffer.concat(self.buffer).toString(encoding === 'buffer' ? undefined : encoding))
-          self.buffer = []
+        self.stdoutBuffer.push(chunk)
+        if (chunk.includes('\n')) {
+          self.info(Buffer.concat(self.stdoutBuffer).toString(encoding === 'buffer' ? undefined : encoding))
+          self.stdoutBuffer = []
         }
         callback()
       },
     })
+    this.stderr = new Writable({
+      write(chunk, encoding, callback) {
+        self.stderrBuffer.push(chunk)
+        if (chunk.includes('\n')) {
+          self.info(Buffer.concat(self.stderrBuffer).toString(encoding === 'buffer' ? undefined : encoding), 'red')
+          self.stderrBuffer = []
+        }
+        callback()
+      },
+    })
+
     this.stdout.on('finish', () => {
       // Reopen stream
       // This statement is needed because unpipe method close all streams
@@ -36,9 +49,9 @@ export class Logger implements ILogger {
     })
   }
 
-  info(text: string) {
+  info(text: string, color?: string) {
     if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
-    this.pipelineLogger.log(this.name, this.color, text)
+    this.pipelineLogger.log(this.name, this.color, text, color)
   }
 
   error(text: Error | string) {
