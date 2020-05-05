@@ -1,9 +1,9 @@
-import { log } from 'builder-util/out/log'
-import { build, CliOptions } from 'electron-builder'
+//import { log } from 'builder-util/out/log'
 import { ILogger, Logger, IBuilder, PipelineError } from '@xpda-dev/core'
+import * as execa from 'execa'
 
 export interface IElectronBuilderOptions {
-  cliOptions?: CliOptions
+  processArgv?: Array<any>
   logger?: ILogger
 }
 
@@ -15,10 +15,12 @@ export class ElectronBuilder implements IBuilder {
   }
 
   async build() {
-    // @ts-ignore
-    log.stream = this.logger.stdout
+    const argumentsArray = this.options.processArgv || process.argv.slice(2)
     try {
-      await build(this.options.cliOptions)
+      const subProcess = execa('electron-builder', argumentsArray)
+      subProcess.stdout.pipe(this.logger.stdout)
+      subProcess.stderr.pipe(this.logger.stdout)
+      await subProcess
     } catch (e) {
       this.logger.error(e)
       throw new PipelineError('Error occurred when building application')
