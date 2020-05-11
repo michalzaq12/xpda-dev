@@ -5,6 +5,7 @@ const { killWithAllSubProcess } = utils
 
 export interface IElectronOptions {
   electronPath: string
+  electronOptions?: string[]
   entryFile: string
   logger?: ILogger
   inspectionPort?: number
@@ -16,12 +17,14 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
   readonly relaunchCode: number
   readonly inspectionPort: number
   readonly electronPath: string
+  readonly electronOptions: string[]
   readonly entryFile: string
   private process: ChildProcess = null
 
   constructor(options: IElectronOptions) {
     super()
     this.electronPath = options.electronPath
+    this.electronOptions = options.electronOptions || [];
     this.entryFile = options.entryFile
     this.relaunchCode = options.relaunchCode || 250
     this.inspectionPort = options.inspectionPort || 5858
@@ -30,7 +33,7 @@ export class ElectronLauncher extends EventEmitter implements ILauncher {
   }
 
   public async launch() {
-    let args = [`--inspect=${this.inspectionPort}`, this.entryFile, '--auto-detect=false', '--no-proxy-server']
+    let args = [`--inspect=${this.inspectionPort}`, this.entryFile, '--auto-detect=false', '--no-proxy-server', ...this.electronOptions]
 
     this.process = spawn(this.electronPath, args)
     this.pipe(this.logger)
