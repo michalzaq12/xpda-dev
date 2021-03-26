@@ -6,7 +6,7 @@ import { ILogger, IPipelineLogger } from '../index'
 export class Logger implements ILogger {
   public stdout: WritableStream
   public stderr: WritableStream
-  private ignoreFunction: Function
+  private ignoreFunctions: Array<(text: string) => boolean> = []
   private pipelineLogger: IPipelineLogger
   private errorLogger: Console
 
@@ -50,7 +50,7 @@ export class Logger implements ILogger {
   }
 
   info(text: string, color?: string) {
-    if (this.ignoreFunction !== undefined && this.ignoreFunction(text)) return
+    for (const ignoreTest of this.ignoreFunctions) if (ignoreTest(text)) return
     this.pipelineLogger.log(this.name, this.color, text, color)
   }
 
@@ -58,8 +58,8 @@ export class Logger implements ILogger {
     this.errorLogger.error(text)
   }
 
-  ignore(ignoreFunc) {
-    this.ignoreFunction = ignoreFunc
+  ignore(test: (text: string) => boolean) {
+    this.ignoreFunctions.push(test)
   }
 
   setPipelineLogger(pipelineLogger: IPipelineLogger) {
