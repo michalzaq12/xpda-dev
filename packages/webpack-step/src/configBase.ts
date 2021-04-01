@@ -1,4 +1,4 @@
-import { Configuration, LibraryTarget, Plugin, Options } from 'webpack'
+import { Configuration, LibraryTarget, Plugin, Options, Module } from 'webpack'
 
 export interface IWebpackConfigBase {
   entry: string
@@ -7,6 +7,7 @@ export interface IWebpackConfigBase {
     path: string
     libraryTarget?: LibraryTarget
   }
+  module?: Module
   plugins?: Plugin[]
   extensions?: Array<string>
   devtool?: Options.Devtool
@@ -34,14 +35,7 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
         },
       }),
     ],
-    module: {
-      rules: [
-        {
-          test: /\.node$/,
-          use: 'node-loader',
-        },
-      ],
-    },
+    module: config.module,
     output: {
       filename: config.output.filename || 'index.js',
       libraryTarget: config.output.libraryTarget || 'commonjs2',
