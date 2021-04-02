@@ -35,7 +35,7 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
         },
       }),
     ],
-    module: config.module,
+    module: config.module || { rules: [] },
     output: {
       filename: config.output.filename || 'index.js',
       libraryTarget: config.output.libraryTarget || 'commonjs2',
