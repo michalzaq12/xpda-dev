@@ -1,6 +1,6 @@
 {
   "name": "@xpda-dev/webpack-step",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Cross platform desktop app development tools",
   "main": "lib/index.js",
   "scripts": {
