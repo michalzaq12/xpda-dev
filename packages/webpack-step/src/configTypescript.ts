@@ -8,7 +8,7 @@ export interface IWebpackConfigTypescript extends IWebpackConfigBase {
 
 export function getTypescriptConfig(config: IWebpackConfigTypescript): Configuration {
   const webpackConfig = getBaseConfig(config)
-  webpackConfig.resolve.extensions.concat(['.tsx', '.ts'])
+  webpackConfig.resolve.extensions.push('.tsx', '.ts')
   webpackConfig.module.rules.push({
     test: /\.tsx?$/,
     use: [
