@@ -1,7 +1,8 @@
-import { Configuration, LibraryTarget, Plugin, Options, Module } from 'webpack'
+import { Configuration, LibraryTarget, Plugin, Options, Module, ExternalsElement } from 'webpack'
 
 export interface IWebpackConfigBase {
   entry: string
+  externals?: ExternalsElement | ExternalsElement[]
   output: {
     filename?: string
     path: string
@@ -24,17 +25,9 @@ export interface IWebpackConfigBase {
 }
 
 export function getBaseConfig(config: IWebpackConfigBase): Configuration {
-  const nodeExternals = require('webpack-node-externals')
-
   return {
     entry: config.entry,
-    externals: [
-      nodeExternals({
-        modulesFromFile: {
-          include: ['dependencies'],
-        },
-      }),
-    ],
+    externals: config.externals,
     module: config.module || { rules: [] },
     output: {
       filename: config.output.filename || 'index.js',

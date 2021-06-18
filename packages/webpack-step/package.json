@@ -1,6 +1,6 @@
 {
   "name": "@xpda-dev/webpack-step",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Cross platform desktop app development tools",
   "main": "lib/index.js",
   "scripts": {
@@ -25,9 +25,6 @@
   "homepage": "https://github.com/michalzaq12/xpda-dev#readme",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
     "ts-loader": "*",
