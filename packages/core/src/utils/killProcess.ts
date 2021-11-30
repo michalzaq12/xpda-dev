@@ -2,7 +2,7 @@ import * as psTree from 'ps-tree'
 
 export function killProcess(pid: number, warningOut: (text: string | Error) => void = console.warn) {
   try {
-    process.kill(pid)
+    process.kill(pid, 'SIGINT')
   } catch (e) {
     // ESRCH = The process has already been killed.
     if (e.code !== 'ESRCH') warningOut(e)
