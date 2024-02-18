@@ -7,8 +7,7 @@
     "test": "lerna run test",
     "test:coverage": "cross-env LERNA=true lerna run test:coverage",
     "build": "lerna run build",
-    "build:watch": "lerna run --parallel build:watch",
-    "prettier": "prettier --write \"packages/**/*.ts\""
+    "build:watch": "lerna run --parallel build:watch"
   },
   "repository": {
     "type": "git",
@@ -27,32 +26,10 @@
     "@types/tmp": "^0.1.0",
     "ava": "^2.2.0",
     "cross-env": "^5.2.0",
-    "husky": "^1.3.1",
     "lerna": "^3.16.4",
-    "lint-staged": "^8.1.0",
-    "prettier": "1.15.3",
-    "rimraf": "^2.6.3",
     "sinon": "^7.4.1",
     "tmp": "^0.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^5.3.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,md},": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "include": [
-      "packages/**/*.ts"
-    ],
-    "all": true
   }
 }
