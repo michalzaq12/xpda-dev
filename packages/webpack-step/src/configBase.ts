@@ -1,27 +1,14 @@
-import { Configuration, LibraryTarget, Plugin, Options, Module, ExternalsElement } from 'webpack'
+import type { Configuration } from 'webpack'
 
 export interface IWebpackConfigBase {
-  entry: string
-  externals?: ExternalsElement | ExternalsElement[]
-  output: {
-    filename?: string
-    path: string
-    libraryTarget?: LibraryTarget
-  }
-  module?: Module
-  plugins?: Plugin[]
+  entry: Configuration['entry']
+  externals?: Configuration['externals']
+  output: Configuration['output']
+  module?: Configuration['module']
+  plugins?: Configuration['plugins']
   extensions?: Array<string>
-  devtool?: Options.Devtool
-  target?:
-    | 'web'
-    | 'webworker'
-    | 'node'
-    | 'async-node'
-    | 'node-webkit'
-    | 'atom'
-    | 'electron'
-    | 'electron-renderer'
-    | 'electron-main'
+  devtool?: Configuration['devtool']
+  target?: Configuration['target']
 }
 
 export function getBaseConfig(config: IWebpackConfigBase): Configuration {
@@ -39,6 +26,6 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
       extensions: ['.js', '.json', '.node'].concat(config.extensions || []),
     },
     devtool: config.devtool,
-    target: config.target || 'electron-main',
+    target: config.target || 'node',
   }
 }

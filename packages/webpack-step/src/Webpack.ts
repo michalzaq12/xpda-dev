@@ -1,7 +1,6 @@
-import * as webpack from 'webpack'
-import { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
+import { webpack } from 'webpack'
+import type { Configuration, Compiler, Watching, Stats as WebpackStats } from 'webpack'
 import { getBaseConfig, IWebpackConfigBase } from './configBase'
-import { getBabelConfig, IWebpackConfigBabel } from './configBabel'
 import { getTypescriptConfig, IWebpackConfigTypescript } from './configTypescript'
 import { ILogger, Logger, IStep, ILauncher, PipelineError } from '@xpda-dev/core'
 
@@ -35,7 +34,7 @@ export class Webpack implements IStep {
   }
 
   async terminate() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       if (this.watching === null) resolve()
       else
         this.watching.close(() => {
@@ -55,7 +54,7 @@ export class Webpack implements IStep {
   }
 
   private async watch() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       this.watching = this.compiler.watch({ ignored: /node_modules/, aggregateTimeout: 3000 }, (err, stats) => {
         if (err) this.logger.error(err.message)
         else {
@@ -68,7 +67,7 @@ export class Webpack implements IStep {
   }
 
   private async run() {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.compiler.run((err, stats) => {
         this.logStats(stats)
         if (err || stats.hasErrors()) reject(new PipelineError('Webpack stats contains error'))
@@ -79,10 +78,6 @@ export class Webpack implements IStep {
 
   static getBaseConfig(config: IWebpackConfigBase) {
     return getBaseConfig(config)
-  }
-
-  static getBabelConfig(config: IWebpackConfigBabel) {
-    return getBabelConfig(config)
   }
 
   static getTypescriptConfig(config: IWebpackConfigTypescript) {

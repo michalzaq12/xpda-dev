@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "ava",
-    "test:coverage": "nyc ava"
+    "test": "ava"
   },
   "files": [
     "lib"
@@ -28,13 +27,11 @@
   },
   "peerDependencies": {
     "ts-loader": "*",
-    "typescript": "*",
-    "webpack": "*"
+    "typescript": "*"
   },
   "devDependencies": {
     "@xpda-dev/core": "^0.1.0",
-    "ts-loader": "^6.0.4",
-    "webpack": "^4.39.1"
+    "ts-loader": "^6.0.4"
   },
   "ava": {
     "compileEnhancements": false,
@@ -49,5 +46,8 @@
     ],
     "snapshotDir": "test/snapshots"
   },
-  "gitHead": "2263a6fcee9964d650475574bca27f4fcfc45f71"
+  "gitHead": "2263a6fcee9964d650475574bca27f4fcfc45f71",
+  "dependencies": {
+    "webpack": "^5.90.2"
+  }
 }
