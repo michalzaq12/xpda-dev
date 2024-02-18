@@ -5,7 +5,6 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "lerna run test",
-    "test:coverage": "cross-env LERNA=true lerna run test:coverage",
     "build": "lerna run build",
     "build:watch": "lerna run --parallel build:watch"
   },

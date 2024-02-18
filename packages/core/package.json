@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "ava",
-    "test:coverage": "nyc ava"
+    "test": "ava"
   },
   "files": [
     "lib"
@@ -32,7 +31,6 @@
     "ps-tree": "^1.2.0"
   },
   "devDependencies": {
-    "@types/node": "^12.6.4",
     "@types/ps-tree": "^1.1.0",
     "execa": "^2.0.3"
   },

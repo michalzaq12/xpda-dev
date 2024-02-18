@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "declaration": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
-    "noLib": false,
     "skipLibCheck": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "target": "es6",
     "lib": [
       "es6"
