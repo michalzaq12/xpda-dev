@@ -24,6 +24,7 @@ export class Logger implements ILogger {
       write(chunk, encoding, callback) {
         self.stdoutBuffer.push(chunk)
         if (chunk.includes('\n')) {
+          // @ts-ignore
           self.info(Buffer.concat(self.stdoutBuffer).toString(encoding === 'buffer' ? undefined : encoding))
           self.stdoutBuffer = []
         }
@@ -34,6 +35,7 @@ export class Logger implements ILogger {
       write(chunk, encoding, callback) {
         self.stderrBuffer.push(chunk)
         if (chunk.includes('\n')) {
+          // @ts-ignore
           self.info(Buffer.concat(self.stderrBuffer).toString(encoding === 'buffer' ? undefined : encoding), 'red')
           self.stderrBuffer = []
         }

@@ -10,7 +10,7 @@ export function killProcess(pid: number, warningOut: (text: string | Error) => v
 }
 
 export function killWithAllSubProcess(pid: number, warningOut: (text: string | Error) => void = console.warn) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     psTree(pid, (err, children) => {
       if (err) reject(err)
       children.forEach(p => {
