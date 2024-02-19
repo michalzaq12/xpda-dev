@@ -26,6 +26,6 @@ export function getBaseConfig(config: IWebpackConfigBase): Configuration {
       extensions: ['.js', '.json', '.node'].concat(config.extensions || []),
     },
     devtool: config.devtool,
-    target: config.target || 'node',
+    target: config.target || 'electron-main',
   }
 }
