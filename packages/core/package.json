@@ -1,6 +1,6 @@
 {
   "name": "@xpda-dev/core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Cross platform desktop app development tools",
   "main": "lib/index.js",
   "scripts": {
@@ -27,11 +27,9 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "ora": "^3.2.0",
-    "ps-tree": "^1.2.0"
+    "ora": "^3.2.0"
   },
   "devDependencies": {
-    "@types/ps-tree": "^1.1.0",
     "execa": "^2.0.3"
   },
   "ava": {
