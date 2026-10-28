@@ -2,7 +2,6 @@
  
   <br>
 
-<a href="https://travis-ci.org/michalzaq12/xpda-dev"><img src="https://img.shields.io/travis/michalzaq12/xpda-dev?style=flat-square"/></a>
 <a href="https://coveralls.io/github/michalzaq12/xpda-dev"><img src="https://img.shields.io/coveralls/github/michalzaq12/xpda-dev?style=flat-square"/></a>
 
   <h1>xpda-dev</h1>
@@ -45,9 +44,6 @@ Launcher allows you to run application when all steps completed (step may fail).
 | ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | ElectronLauncher | Launch [electron](https://github.com/electron/electron) | [IElectronOptions](https://github.com/michalzaq12/xpda-dev/blob/master/packages/electron-launcher/src/ElectronLauncher.ts#L6) | [@xpda-dev/electron-launcher](https://www.npmjs.com/package/@xpda-dev/electron-launcher) |
 
-### Launcher
-
-// TODO
 
 <h2 align="center">Examples</h2>
 

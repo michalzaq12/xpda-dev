@@ -6,7 +6,8 @@
   "scripts": {
     "test": "lerna run test",
     "build": "lerna run build",
-    "build:watch": "lerna run --parallel build:watch"
+    "build:watch": "lerna run --parallel build:watch",
+    "publish": "npm publish --//registry.npmjs.org/:_authToken=npm_[...]"
   },
   "repository": {
     "type": "git",
